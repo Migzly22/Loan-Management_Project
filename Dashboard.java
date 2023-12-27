@@ -10,25 +10,12 @@ import java.awt.event.WindowEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Dashboard {
+public class Dashboard implements RootValue{
     public static String USERNAME = "AdminName";
 
-    public final static String whiteColor = "#ffffff";//text related and bg
-    public final static String blueColor = "#007dfe"; // bg related 
-    public final static String blackColor = "#4d4d4d";
-    public final static String currentDirectory = System.getProperty("user.dir") + "\\GiPit_icons";
     static Sidebar leftSidebar2 = new Sidebar();
 
-    public final static Font customFont7 = new Font("Century Gothic", Font.BOLD, 15);
-    public final static Font customFont8 = new Font("Century Gothic", Font.BOLD, 30);
-    public final static Font customFont9 = new Font("Century Gothic", Font.BOLD, 18);
-    public final static Font customFont10 = new Font("Century Gothic", Font.PLAIN, 17);
-    public final static Font customFont11 = new Font("Century Gothic", Font.BOLD, 16);
-    public final static Font customFontPS = new Font("Segoe UI", Font.PLAIN, 18);
-    
-
-
-    public static void main(String[] args) {
+    public void dashboardFrame() {
                 
         leftSidebar2.sidebar();//run the sidebar code
 
@@ -47,7 +34,7 @@ public class Dashboard {
         //JPanel dashbRight = new JPanel(new FlowLayout());
         JPanel dashbRight = new JPanel(null);
 
-        Border dashbNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
+        Border dashbNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode(greycolor));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         dashbRight.setBorder(dashbNoLefttBorder);
 
         JLabel dashword = new JLabel("Dashboard");
@@ -59,7 +46,7 @@ public class Dashboard {
         JLabel lineRight1 = new JLabel();
 
         lineRight1.setOpaque(true);
-        lineRight1.setBackground(Color.decode("#DBDCDE")); // Set the line color
+        lineRight1.setBackground(Color.decode(greycolor)); // Set the line color
         lineRight1.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
 
@@ -161,7 +148,7 @@ public class Dashboard {
         boxRight1.setBackground(Color.decode(whiteColor));
 
         border1.setBounds(24,129,182,82);
-        border1.setBackground(Color.decode("#DBDCDE"));
+        border1.setBackground(Color.decode(greycolor));
 
         leftbox1.setBounds(40,140,80,60);
         leftbox1.setBackground(Color.decode(whiteColor));
@@ -179,7 +166,7 @@ public class Dashboard {
         boxRight2.setBackground(Color.decode(whiteColor));
 
         border2.setBounds(249,129,182,82);
-        border2.setBackground(Color.decode("#DBDCDE"));
+        border2.setBackground(Color.decode(greycolor));
 
 		leftbox2.setBounds(265,140,80,60);
         leftbox2.setBackground(Color.decode(whiteColor));
@@ -190,13 +177,13 @@ public class Dashboard {
 
 		//box todays profit
 		boxLeft3.setBounds(475,130,65,80);
-        boxLeft3.setBackground(Color.decode("#57F287"));
+        boxLeft3.setBackground(Color.decode(greenColor));
 
         boxRight3.setBounds(540,130,115,80);
         boxRight3.setBackground(Color.decode(whiteColor));
 
         border3.setBounds(474,129,182,82);
-        border3.setBackground(Color.decode("#DBDCDE"));
+        border3.setBackground(Color.decode(greycolor));
 
 		leftbox3.setBounds(490,140,80,60);
         leftbox3.setBackground(Color.decode(whiteColor));

@@ -17,6 +17,7 @@ public class Sidebar implements RootValue{
     
     public void sidebar(){
         
+        
         ImageIcon icon2 = new ImageIcon( currentDirectory +"\\gplg.png");
         ImageIcon dashbicon = new ImageIcon( currentDirectory +"\\dashboard.png");
         ImageIcon settingsicon = new ImageIcon( currentDirectory +"\\settings.png");
@@ -25,17 +26,15 @@ public class Sidebar implements RootValue{
 
         JLabel logoTopSidebar = new JLabel();
 
-        Border dashbNoRightBorder = new MatteBorder(2, 2, 3, 0, Color.decode("#DBDCDE"));//ffffff or DBDCDE oe 8CC7FC or ecf6fe //TLBR
+        Border dashbNoRightBorder = new MatteBorder(2, 2, 3, 0, Color.decode(greycolor));//ffffff or DBDCDE oe 8CC7FC or ecf6fe //TLBR
         leftSidebar.setBorder(dashbNoRightBorder);
-
-
 
         logoTopSidebar.setIcon(icon2);
 
         JLabel lineLeft = new JLabel();
 
         lineLeft.setOpaque(true);
-        lineLeft.setBackground(Color.decode("#DBDCDE")); // Set the line color
+        lineLeft.setBackground(Color.decode(greycolor)); // Set the line color
         lineLeft.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
 
@@ -68,7 +67,7 @@ public class Sidebar implements RootValue{
         JLabel lineBottom = new JLabel();
 
         lineBottom.setOpaque(true);
-        lineBottom.setBackground(Color.decode("#DBDCDE")); // Set the line color
+        lineBottom.setBackground(Color.decode(greycolor)); // Set the line color
         lineBottom.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
 

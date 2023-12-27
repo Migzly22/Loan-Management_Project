@@ -29,7 +29,6 @@ public class Loan implements RootValue{
         Border debNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         debtorRight.setBorder(debNoLefttBorder);
 
-
         JLabel debtorword = new JLabel("Debtors");
         debtorword.setFont(customFont8);
         debtorword.setForeground(Color.decode("#073cb7"));
@@ -122,10 +121,7 @@ public class Loan implements RootValue{
                 paybtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        //
 
-
-        //Add Button Frame
         JFrame frame3 = new JFrame("Add Debtor");
         JPanel addDebTop = new JPanel(null);
 
@@ -135,7 +131,7 @@ public class Loan implements RootValue{
 
         //End Add Button Frame
 
-		//Debtor content
+//SETBOUNDS
         debtorRight.setBounds(200, 0, 700, 550); //600
         debtorRight.setBackground(Color.decode("#F2F3F5"));
 
@@ -145,17 +141,14 @@ public class Loan implements RootValue{
         searchtfDebtor.setBounds(200, 100, 230, 40);
         searchbtnDebtor.setBounds(440, 100, 90, 37);
         addbtnDebtor.setBounds(550, 100, 90, 37);
-        //
 
-        //Table Debtor
         spDebtor.setBounds(20,170,645,130);
 
-        //
         viewbtnDebtor.setBounds(200, 330, 100, 40);
         paybtnDebtor.setBounds(350, 330, 100, 40);
 
 
-
+//ADD TO FRAME
         frame2.setLayout(null);
         frame2.setUndecorated(false);
         frame2.setBounds(0, 0, 900, 550); //600

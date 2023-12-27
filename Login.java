@@ -5,15 +5,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.table.*;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
+public class Login extends Entity implements RootValue{
 
-public class Login implements RootValue{
+    static AdditionalFrames addons = new AdditionalFrames();
+    static Login entitycontainer = new Login();
 
     public static void main(String[] args) {
+
         String imagePath = currentDirectory + "\\GiPit_lg.png";
 
         // LOGIN FRAME (LEFT PART)
@@ -84,6 +83,18 @@ public class Login implements RootValue{
         loginBtn.setBackground(Color.decode(blueColor));
         loginBtn.setBorder(new LineBorder(Color.decode("#DBDCDE"), 2)); //#ffffff or #073cb7 or #DBDCDE
         loginBtn.setFocusPainted(false);
+
+
+        loginBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent  e){
+                frame1.setVisible(false);
+                addons.Success("String Title","String Message");
+                Dashboard dashboard = new Dashboard();
+                dashboard.dashboardFrame();
+
+            }
+        });
+
 
         //SETBOUNDS
         left.setBounds(0, 0, 400, 500);
