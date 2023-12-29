@@ -7,11 +7,32 @@ import javax.swing.table.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ViewLoan implements RootValue {
-    public static void main(String[] args) {
+
+    //Jtextfield left
+    JTextField vdFirstNametf = new JTextField();
+    JTextField vdMiddleNametf = new JTextField();
+    JTextField vdLastNametf = new JTextField();
+    JTextField vdGendertf = new JTextField();
+    JTextField vdDoBtf = new JTextField();
+    JTextField vdJobtf = new JTextField();
+
+    //Jtextfield right
+    JTextField vdAmountLoantf = new JTextField();
+    JTextField vdInterestRatetf = new JTextField();
+    JTextField vdNoPtf = new JTextField();
+    JTextField vdMPtf = new JTextField();
+    JTextField vdTLtf = new JTextField();
+    JTextField vdPAtf = new JTextField();
+
+
+    public void viewLoanFrames(int ID) {
         //View Debtor Frame
         JFrame viewDebtorFrame = new JFrame("View Debtor");
         JPanel viewDebtorTopbar = new JPanel(null);
@@ -45,14 +66,6 @@ public class ViewLoan implements RootValue {
         JLabel vdDoBLabel = new JLabel("Date of Birth :");
         JLabel vdJobLabel = new JLabel("Job :");
 
-        //Jtextfield left
-        JTextField vdFirstNametf = new JTextField();
-        JTextField vdMiddleNametf = new JTextField();
-        JTextField vdLastNametf = new JTextField();
-        JTextField vdGendertf = new JTextField();
-        JTextField vdDoBtf = new JTextField();
-        JTextField vdJobtf = new JTextField();
-
         //Jlabel right
         JLabel vdAmountLoanLabel = new JLabel("Amount Loan");
         JLabel vdInterestRateLabel = new JLabel("Interest Rate");
@@ -61,19 +74,7 @@ public class ViewLoan implements RootValue {
         JLabel vdTLLabel = new JLabel("Total Loan");
         JLabel vdPALabel = new JLabel("Paid Amount");
 
-
-        //Jtextfield right
-        JTextField vdAmountLoantf = new JTextField();
-        JTextField vdInterestRatetf = new JTextField();
-        JTextField vdNoPtf = new JTextField();
-        JTextField vdMPtf = new JTextField();
-        JTextField vdTLtf = new JTextField();
-        JTextField vdPAtf = new JTextField();
-        //
-
         //left style
-        //Font customFont16 = new Font("Century Gothic", Font.BOLD, 13);
-
 
         vdFirstNameLabel.setFont(customFont16);
         vdMiddleNameLabel.setFont(customFont16);
@@ -211,14 +212,17 @@ public class ViewLoan implements RootValue {
 
         //Mouse Icon Hover
         vdCancelbtn.addMouseListener(new MouseAdapter() {
-            @Override
+
             public void mouseEntered(MouseEvent e) {
                 vdCancelbtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
-            @Override
             public void mouseExited(MouseEvent e) {
                 vdCancelbtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+            
+            public void mouseClicked(MouseEvent e) {
+                viewDebtorFrame.setVisible(false);
             }
         });
 
@@ -318,5 +322,20 @@ public class ViewLoan implements RootValue {
 
         viewDebtorFrame.add(viewDebtorBottombar);
 
+
+    }
+
+    public void loadTheData(PreparedStatement statement){
+        try {
+            ResultSet resultSet = statement.executeQuery();
+
+            // Add data rows to the table model
+            while (resultSet.next()) {
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

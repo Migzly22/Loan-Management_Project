@@ -13,6 +13,10 @@ public class SettingAdditional implements RootValue{
 
     Entity entity = Entity.getInstance();
 
+    public static void main(String[] args) {
+        ChangePassword();
+    }
+
     public void ChangeAdminname(){
         //Settings ChangeBtn1 Enter Admin Name: Frame
         JFrame cbtn1Framesett = new JFrame("Enter Admin Name");
@@ -167,7 +171,7 @@ public class SettingAdditional implements RootValue{
 
         cbtn2Framesett.add(cbtn2Panelsett);
     }
-    public void ChangePassword(){
+    public static void ChangePassword(){
         JFrame cbtn3Framesett = new JFrame("Enter new Password: ");
         JPanel cbtn3Panelsett = new JPanel(null);
         Border cbtn3Bordersett = new MatteBorder(3, 3, 3, 3, Color.decode("#DBDCDE"));//ffffff or DBDCDE oe 8CC7FC or ecf6fe //TLBR

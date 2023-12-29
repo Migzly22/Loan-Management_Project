@@ -113,27 +113,46 @@ public class Loan implements RootValue{
         });
         //Mouse Icon Hover
         viewbtnDebtor.addMouseListener(new MouseAdapter() {
-            @Override
+
             public void mouseEntered(MouseEvent e) {
                 viewbtnDebtor.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
-            @Override
             public void mouseExited(MouseEvent e) {
                 viewbtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+            public void mouseClicked(MouseEvent e) {
+
+                ViewLoan viewLoan = new ViewLoan();
+                int selectedRow = tb1Debtor.getSelectedRow();
+                if (selectedRow!= -1){
+                    int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
+                    viewLoan.viewLoanFrames(id);
+                }
+                
             }
         });
         //
         //Mouse Icon Hover
         paybtnDebtor.addMouseListener(new MouseAdapter() {
-            @Override
+
             public void mouseEntered(MouseEvent e) {
                 paybtnDebtor.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
-            @Override
             public void mouseExited(MouseEvent e) {
                 paybtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            public void mouseClicked(MouseEvent e) {
+
+                Payment viewFrame = new Payment();
+
+                int selectedRow = tb1Debtor.getSelectedRow();
+                if (selectedRow!= -1){
+                    int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
+                    viewFrame.paymentFrame(id);
+                }
             }
         });
 

@@ -11,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Payment implements RootValue{
-    public static void main(String[] args) {
+    public void paymentFrame(int ID) {
           //Pay Debtor Frame
         JFrame payDebtorFrame = new JFrame("Pay");
         JPanel payDebtorTopbar = new JPanel(null);
@@ -124,14 +124,18 @@ public class Payment implements RootValue{
 
         //Mouse Icon Hover
         pdCancelBtn.addMouseListener(new MouseAdapter() {
-            @Override
+ 
             public void mouseEntered(MouseEvent e) {
                 pdCancelBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
-            @Override
+
             public void mouseExited(MouseEvent e) {
                 pdCancelBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            public void mouseClicked(MouseEvent e) {
+                payDebtorFrame.setVisible(false);
             }
         });
 
