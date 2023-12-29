@@ -16,16 +16,11 @@ import java.awt.event.*;
 
 public class Loan implements RootValue{
 
-    static Sidebar leftSidebar2 = new Sidebar();
     public JPanel leftSidebar = new JPanel(null);
+    JPanel debtorRight = new JPanel(null);
 
-    public static void main(String[] args) {
+    public void loanlist() {
         
-        leftSidebar2.sidebar();//run the sidebar code
-
-        JFrame frame2 = new JFrame("Loan");
-
-        JPanel debtorRight = new JPanel(null);
         Border debNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         debtorRight.setBorder(debNoLefttBorder);
 
@@ -149,13 +144,6 @@ public class Loan implements RootValue{
 
 
 //ADD TO FRAME
-        frame2.setLayout(null);
-        frame2.setUndecorated(false);
-        frame2.setBounds(0, 0, 900, 550); //600
-        frame2.setLocationRelativeTo(null);
-        frame2.setVisible(true);//false
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.add(leftSidebar2.leftSidebar);//add sidebar
 
 
         debtorRight.add(debtorword);
@@ -167,6 +155,6 @@ public class Loan implements RootValue{
 		debtorRight.add(viewbtnDebtor);
 		debtorRight.add(paybtnDebtor);
 
-		frame2.add(debtorRight);
+
     }
 }

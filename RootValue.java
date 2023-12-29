@@ -7,10 +7,20 @@ import javax.swing.table.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+
 public interface RootValue {
+
+    //START ---SQL connections
+    Connector connector = new Connector();
+    Connection conn = connector.connectdb();
+    //END   ---SQL connections
+    DefaultTableModel table1 = new DefaultTableModel();
+
+//DESIGN RELATED
     public final String whiteColor = "#ffffff";//text related and bg
     public final String whiteColor2 = "#FBFBFC";
 

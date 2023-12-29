@@ -13,15 +13,12 @@ import java.awt.event.MouseEvent;
 
 public class Setting implements RootValue{
 
-    static Sidebar leftSidebar2 = new Sidebar();
+
+    JPanel settingsRight = new JPanel(null);
+
+    public void settingspanel() {
 
 
-    public static void main(String[] args) {
-        leftSidebar2.sidebar();//run the sidebar code
-
-        JFrame frame2 = new JFrame("Settings");
-        //Settings
-        JPanel settingsRight = new JPanel(null);
         Border settNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         settingsRight.setBorder(settNoLefttBorder);
 
@@ -102,17 +99,6 @@ public class Setting implements RootValue{
 		settingsRight.add(changebtn2Settings);
 		settingsRight.add(changebtn3Settings);
 
-
-
-
-        frame2.setLayout(null);
-        frame2.setUndecorated(false);
-        frame2.setBounds(0, 0, 900, 550); //600
-        frame2.setLocationRelativeTo(null);
-        frame2.setVisible(true);//false
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.add(leftSidebar2.leftSidebar);//add sidebar
-        frame2.add(settingsRight);
 
     }
 }

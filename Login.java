@@ -1,22 +1,28 @@
 import javax.swing.*;
 import javax.swing.border.*;
-
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.table.*;
+import java.sql.*;
 import javax.swing.table.*;
 
 
-public class Login extends Entity implements RootValue{
+public class Login implements RootValue{
 
     static AdditionalFrames addons = new AdditionalFrames();
-    static Login entitycontainer = new Login();
+    static JFrame frame1 = new JFrame("GiPit - Loan Management System");
 
     public static void main(String[] args) {
 
         String imagePath = currentDirectory + "\\GiPit_lg.png";
 
         // LOGIN FRAME (LEFT PART)
-        JFrame frame1 = new JFrame("GiPit - Loan Management System");
+        
 
         JPanel left = new JPanel(null); 
 
@@ -70,11 +76,7 @@ public class Login extends Entity implements RootValue{
         showPass.setBackground(Color.decode(whiteColor));
         showPass.setFocusPainted(false);
 
-        showPass.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e){
-                passTf.setEchoChar(showPass.isSelected() ? '\0' : '\u2022');
-            }
-        });
+
 
         JButton loginBtn = new JButton("Login");
 
@@ -85,18 +87,24 @@ public class Login extends Entity implements RootValue{
         loginBtn.setFocusPainted(false);
 
 
+//EVENTS
+        showPass.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e){
+                passTf.setEchoChar(showPass.isSelected() ? '\0' : '\u2022');
+            }
+        });
         loginBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent  e){
                 frame1.setVisible(false);
-                addons.Success("String Title","String Message");
-                Dashboard dashboard = new Dashboard();
-                dashboard.dashboardFrame();
+                authenticate(userNametf.getText(), new String(passTf.getPassword()));
 
+                
             }
         });
 
 
-        //SETBOUNDS
+
+//SETBOUNDS
         left.setBounds(0, 0, 400, 500);
         left.setBackground(Color.decode(blueColor)); //#007dfe
         logoLeft.setBounds(70, 60, 300, 300);
@@ -113,7 +121,7 @@ public class Login extends Entity implements RootValue{
         loginBtn.setBounds(250, 320, 90, 37);
 
 
-        //ADD TO FRAME
+//ADD TO FRAME
         frame1.setLayout(null);
         frame1.setBounds(0, 0, 800, 500);
         frame1.setLocationRelativeTo(null);
@@ -134,4 +142,60 @@ public class Login extends Entity implements RootValue{
         frame1.add(right);
 
     }
+
+//CODE FOR AUTHENITCATION
+    public static void authenticate(String username, String password){
+        String sql = "SELECT * FROM userdata WHERE userName = ? AND password = ? ";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                do {
+                    Entity entity = Entity.getInstance();
+                    entity.setAdminNAME(resultSet.getString("name"));
+                    System.out.print(resultSet.getString("name"));
+                    nofifs(true);
+                } while (resultSet.next());
+            } else {
+                // There are no rows in the ResultSet
+                nofifs(false);
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+//CODE FOR NOTIFICATIONS
+    public static void nofifs(boolean status){
+        if (status) {
+            addons.messages("Login", "\\Check-65.png", "Login Successfully");
+            addons.okLoginlc.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    addons.FrameNotif.setVisible(false);
+                    
+                    Sidebar dashB = new Sidebar();
+                    dashB.sidebar();
+
+                    addons.FrameNotif.dispose();
+                    frame1.setVisible(false);
+                }
+            });
+        }else{
+            addons.messages("Login", "\\Ekis-65.png", "Wrong User Credentials");
+            addons.okLoginlc.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    addons.FrameNotif.setVisible(false);
+                    addons.FrameNotif.dispose();
+                    frame1.setVisible(true);
+                }
+            });
+        }
+    }
+
 }

@@ -1,7 +1,18 @@
 public class Entity {
     private String AdminNAME;
-    private boolean PopUpValue = false;
+    private static Entity instance;
+    private Entity() {
+        // Private constructor to prevent instantiation
+    }
 
+    public static Entity getInstance() {
+        if (instance == null) {
+            instance = new Entity();
+        }
+        return instance;
+    }
+
+    
     // Getter and setter for AdminNAME
     public String getAdminNAME() {
         return AdminNAME;
@@ -11,12 +22,5 @@ public class Entity {
         this.AdminNAME = adminNAME;
     }
 
-    // Getter and setter for PopUpValue
-    public boolean isPopUpValue() {
-        return PopUpValue;
-    }
 
-    public void setPopUpValue(boolean popUpValue) {
-        this.PopUpValue = popUpValue;
-    }
 }

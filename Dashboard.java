@@ -11,28 +11,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Dashboard implements RootValue{
-    public static String USERNAME = "AdminName";
 
-    static Sidebar leftSidebar2 = new Sidebar();
+    Entity entity = Entity.getInstance();
+    public String USERNAME = entity.getAdminNAME();
+
+    JPanel dashbRight = new JPanel(null);
 
     public void dashboardFrame() {
-                
-        leftSidebar2.sidebar();//run the sidebar code
 
+        System.out.println(USERNAME);
 
-        ImageIcon nodebtorsicon = new ImageIcon( currentDirectory +"s\\no.debtors.png");
+        ImageIcon nodebtorsicon = new ImageIcon( currentDirectory +"\\no.debtors.png");
         ImageIcon duetodayicon = new ImageIcon( currentDirectory +"\\due-today.png");
         ImageIcon todaysProfiticon = new ImageIcon( currentDirectory +"\\profit.png");
         
         
-        // DASHBOARD
-        JFrame frame2 = new JFrame("Dashboard");
-       
-
-
 		//Dashboard Module
-        //JPanel dashbRight = new JPanel(new FlowLayout());
-        JPanel dashbRight = new JPanel(null);
 
         Border dashbNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode(greycolor));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         dashbRight.setBorder(dashbNoLefttBorder);
@@ -48,9 +42,6 @@ public class Dashboard implements RootValue{
         lineRight1.setOpaque(true);
         lineRight1.setBackground(Color.decode(greycolor)); // Set the line color
         lineRight1.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
-
-
-
 
         JLabel wcUser = new JLabel("Welcome User: " + USERNAME);
 
@@ -138,7 +129,7 @@ public class Dashboard implements RootValue{
 
         dashword.setBounds(15, 7, 200, 50);
         lineRight1.setBounds(0, 65, 700, 2);
-        wcUser.setBounds(10,70,150,50);
+        wcUser.setBounds(10,70,350,50);
 
 		//box debtors
         boxLeft1.setBounds(25,130,65,80);
@@ -198,16 +189,7 @@ public class Dashboard implements RootValue{
 
 
 
-        frame2.setLayout(null);
-        frame2.setUndecorated(true);
-        frame2.setBounds(0, 0, 900, 550); //600
-        frame2.setLocationRelativeTo(null);
-        frame2.setVisible(true);//false
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-        frame2.add(leftSidebar2.leftSidebar);//add sidebar
-
+        
 		//Dashboard
 		dashbRight.add(dashword);
 		dashbRight.add(lineRight1);
@@ -244,7 +226,7 @@ public class Dashboard implements RootValue{
 
 		dashbRight.add(spDashboard);
 
-        frame2.add(dashbRight);
+
 
     }
 }

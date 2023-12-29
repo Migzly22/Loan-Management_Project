@@ -3,20 +3,25 @@ import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.table.*;
+import java.util.Arrays;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.table.*;
 
 public class Sidebar implements RootValue{
 
-    static Sidebar leftSidebar2 = new Sidebar();
-    public JPanel leftSidebar = new JPanel(null);
-    
-    public void sidebar(){
+
+    public static void main(String[] args){//sidebar
+        JFrame frame2 = new JFrame("Dashboard");
+        JPanel leftSidebar = new JPanel(null);
+
         
+        Dashboard dashboard = new Dashboard();
+        Setting setting = new Setting();
+        Loan loan = new Loan();
+
+        dashboard.dashboardFrame();
+        setting.settingspanel();
+        loan.loanlist();
         
         ImageIcon icon2 = new ImageIcon( currentDirectory +"\\gplg.png");
         ImageIcon dashbicon = new ImageIcon( currentDirectory +"\\dashboard.png");
@@ -71,7 +76,7 @@ public class Sidebar implements RootValue{
         lineBottom.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
 
-        // SIDEBAR
+// SETBOUNDS
         leftSidebar.setBounds(0, 0, 200, 550); //600
         leftSidebar.setBackground(Color.decode(blueColor)); //#007dfe
         logoTopSidebar.setBounds(20, 5, 200, 50);
@@ -90,5 +95,81 @@ public class Sidebar implements RootValue{
         leftSidebar.add(settingsLogo);
         leftSidebar.add(logoutLogo);
 
+//ACTION
+        settingsLogo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+    
+                frame2.remove(dashboard.dashbRight);
+                frame2.remove(setting.settingsRight);
+                frame2.remove(loan.debtorRight);
+
+                frame2.setTitle("Settings");
+                frame2.add(setting.settingsRight);
+
+                // Update the container
+                frame2.revalidate();
+                frame2.repaint();
+            }
+
+        });
+        dashbLogo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                frame2.remove(dashboard.dashbRight);
+                frame2.remove(setting.settingsRight);
+                frame2.remove(loan.debtorRight);
+
+                frame2.setTitle("Dashboard");
+                frame2.add(dashboard.dashbRight);
+
+                // Update the container
+                frame2.revalidate();
+                frame2.repaint();
+            }
+
+        });
+        debtorLogo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                frame2.remove(dashboard.dashbRight);
+                frame2.remove(setting.settingsRight);
+                frame2.remove(loan.debtorRight);
+
+                frame2.setTitle("Loan");
+                frame2.add(loan.debtorRight);  
+
+                frame2.revalidate();
+                frame2.repaint();
+            }
+
+        });
+        //GOING BACK TO LOGIN
+        logoutLogo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame2.setVisible(false);
+
+                Login login = new Login();
+                login.main(null);
+            }
+
+        });
+//ADD TO FRAME
+        frame2.setLayout(null);
+        frame2.setUndecorated(true);
+        frame2.setBounds(0, 0, 900, 550); //600
+        frame2.setLocationRelativeTo(null);
+        frame2.setVisible(true);//false
+        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame2.add(leftSidebar);//add sidebar
+        frame2.add(dashboard.dashbRight);
+
+
+
     }
+
 }
