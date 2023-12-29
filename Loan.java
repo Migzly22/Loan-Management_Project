@@ -13,11 +13,18 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Loan implements RootValue{
 
-    public JPanel leftSidebar = new JPanel(null);
+    JPanel leftSidebar = new JPanel(null);
     JPanel debtorRight = new JPanel(null);
+
+	DefaultTableModel dtmDebtor = new DefaultTableModel();
 
     public void loanlist() {
         
@@ -58,16 +65,6 @@ public class Loan implements RootValue{
         searchbtnDebtor.setFocusPainted(false);
         addbtnDebtor.setFocusPainted(false);
 
-		//Table Debtor
-		String [] [] rowDebtor = {{"", "", "", "", "", "", ""},
-							 {"", "", "", "", "", "", ""},
-							 {"", "", "", "", "", "", ""},
-							 {"", "", "", "", "", "", ""},
-							 {"", "", "", "", "", "", ""}};
-
-		String [] colDebtor = {"ID", "Name", "Date", "Loan", "Interest", "Total", "Status"};
-
-		DefaultTableModel dtmDebtor = new DefaultTableModel(rowDebtor,colDebtor);
 		JTable tb1Debtor = new JTable(dtmDebtor);
 
 		JScrollPane spDebtor = new JScrollPane(tb1Debtor);
@@ -91,6 +88,29 @@ public class Loan implements RootValue{
         viewbtnDebtor.setFocusPainted(false);
         paybtnDebtor.setFocusPainted(false);
 
+//ACTION
+        searchbtnDebtor.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, c.TypeName AS `Classification`, a.LoanAmount AS `Amount`, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID LEFT JOIN loantypes c ON a.LoanTypeID = c.LoanTypeID " +
+                "WHERE b.FirstName LIKE ? OR b.LastName LIKE ? OR b.Middlename LIKE ? OR b.Email LIKE ? OR c.TypeName LIKE ? OR a.LoanAmount LIKE ? OR a.Status LIKE ? " +
+                "ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName";
+                String text = searchtfDebtor.getText();
+                
+                try {
+                    PreparedStatement statement = conn.prepareStatement(sql);
+                    statement.setString(1, "%" + text + "%");  // assuming text is your search text
+                    statement.setString(2, "%" + text + "%");
+                    statement.setString(3, "%" + text + "%");
+                    statement.setString(4, "%" + text + "%");
+                    statement.setString(5, "%" + text + "%");
+                    statement.setString(6, "%" + text + "%");
+                    statement.setString(7, "%" + text + "%");
+                    loadTheData(statement);
+                } catch (SQLException sqlexe) {
+                    sqlexe.printStackTrace();
+                }
+            }
+        });
         //Mouse Icon Hover
         viewbtnDebtor.addMouseListener(new MouseAdapter() {
             @Override
@@ -116,15 +136,6 @@ public class Loan implements RootValue{
                 paybtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-
-        JFrame frame3 = new JFrame("Add Debtor");
-        JPanel addDebTop = new JPanel(null);
-
-        JLabel logoTopLeft = new JLabel();
-        ImageIcon icon3 = new ImageIcon("C:\\Users\\TYLER JAKE\\Desktop\\JAVA CODES\\Loan-Management_Project\\GiPit_icons\\gplg.png");
-        logoTopLeft.setIcon(icon3);
-
-        //End Add Button Frame
 
 //SETBOUNDS
         debtorRight.setBounds(200, 0, 700, 550); //600
@@ -156,5 +167,44 @@ public class Loan implements RootValue{
 		debtorRight.add(paybtnDebtor);
 
 
+        String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, c.TypeName AS Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID LEFT JOIN loantypes c ON a.LoanTypeID = c.LoanTypeID ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            loadTheData(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    public void loadTheData(PreparedStatement statement){
+        try {
+            ResultSet resultSet = statement.executeQuery();
+
+
+            // Clear existing data from table1
+            dtmDebtor.setRowCount(0);
+            dtmDebtor.setColumnCount(0);
+
+            // Get the number of columns in the result set
+            int columnCount = resultSet.getMetaData().getColumnCount();
+
+            // Add column names to the table model
+            for (int i = 1; i <= columnCount; i++) {
+                dtmDebtor.addColumn(resultSet.getMetaData().getColumnName(i));
+            }
+
+            // Add data rows to the table model
+            while (resultSet.next()) {
+                Object[] row = new Object[columnCount];
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = resultSet.getObject(i);
+                }
+                dtmDebtor.addRow(row);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

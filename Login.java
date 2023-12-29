@@ -17,6 +17,8 @@ public class Login implements RootValue{
     static AdditionalFrames addons = new AdditionalFrames();
     static JFrame frame1 = new JFrame("GiPit - Loan Management System");
 
+    static JTextField userNametf = new JTextField("");
+    static JPasswordField passTf = new JPasswordField("");
     public static void main(String[] args) {
 
         String imagePath = currentDirectory + "\\GiPit_lg.png";
@@ -52,7 +54,6 @@ public class Login implements RootValue{
         username.setForeground(Color.decode(blackColor)); //#4d4d4d or #808080
 
 
-        JTextField userNametf = new JTextField("");
 
         userNametf.setForeground(Color.decode(blackColor));
         userNametf.setFont(customFont4);
@@ -63,7 +64,7 @@ public class Login implements RootValue{
         pass.setFont(customFont3);
         pass.setForeground(Color.decode(blackColor));
 
-        JPasswordField passTf = new JPasswordField("");
+
 
         passTf.setForeground(Color.decode(blackColor));
         passTf.setFont(customFont4);
@@ -101,8 +102,6 @@ public class Login implements RootValue{
                 
             }
         });
-
-
 
 //SETBOUNDS
         left.setBounds(0, 0, 400, 500);
@@ -145,7 +144,7 @@ public class Login implements RootValue{
 
 //CODE FOR AUTHENITCATION
     public static void authenticate(String username, String password){
-        String sql = "SELECT * FROM userdata WHERE userName = ? AND password = ? ";
+        String sql = "SELECT * FROM usercredentials WHERE Username = ? AND Password = ? ";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
@@ -160,7 +159,7 @@ public class Login implements RootValue{
                 do {
                     Entity entity = Entity.getInstance();
                     entity.setAdminNAME(resultSet.getString("name"));
-                    System.out.print(resultSet.getString("name"));
+                    entity.setUSERID(resultSet.getInt("UserID"));
                     nofifs(true);
                 } while (resultSet.next());
             } else {
@@ -183,6 +182,8 @@ public class Login implements RootValue{
                     dashB.sidebar();
 
                     addons.FrameNotif.dispose();
+                    userNametf.setText("");
+                    passTf.setText("");
                     frame1.setVisible(false);
                 }
             });

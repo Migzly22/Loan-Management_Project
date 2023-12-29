@@ -3,9 +3,15 @@ import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.table.*;
 
 public class SettingAdditional implements RootValue{
+
+    Entity entity = Entity.getInstance();
 
     public void ChangeAdminname(){
         //Settings ChangeBtn1 Enter Admin Name: Frame
@@ -35,18 +41,36 @@ public class SettingAdditional implements RootValue{
         cbtn1SubmitBtn.setBorder(new LineBorder(Color.decode("#DBDCDE"), 2)); //#ffffff or #073cb7 or #DBDCDE
         cbtn1SubmitBtn.setFocusPainted(false);
 
-        //Mouse Icon Hover
+//Mouse Icon Hover
         cbtn1SubmitBtn.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseEntered(MouseEvent e) {
                 cbtn1SubmitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
-            @Override
             public void mouseExited(MouseEvent e) {
                 cbtn1SubmitBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
+
+            public void mouseClicked(MouseEvent e) {
+                String newAdminName = enterAdminNametf.getText();
+                entity.setAdminNAME(newAdminName);
+                String sql = "UPDATE usercredentials SET Name = ? WHERE UserID = ? ;";
+
+                if(newAdminName.length() > 0){
+                    try {
+                        PreparedStatement statement = conn.prepareStatement(sql);
+                        statement.setString(1, newAdminName);  // assuming text is your search text
+                        statement.setInt(2, entity.getUSERID());
+                        updateTheData(statement);
+                    } catch (SQLException sqlexe) {
+                        sqlexe.printStackTrace();
+                    }
+                    cbtn1Framesett.setVisible(false);
+                }
+            }
         });
+
+
 //SETBOUNDS
         cbtn1Panelsett.setBounds(0, 0, 350, 200);
 		cbtn1Panelsett.setBackground(Color.decode("#ffffff"));
@@ -104,6 +128,22 @@ public class SettingAdditional implements RootValue{
             @Override
             public void mouseExited(MouseEvent e) {
                 cbtn2SubmitBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+            public void mouseClicked(MouseEvent e) {
+                String newUsername = enterNewUsernametf.getText();
+                String sql = "UPDATE usercredentials SET Username = ? WHERE UserID = ? ;";
+
+                if(newUsername.length() > 0){
+                    try {
+                        PreparedStatement statement = conn.prepareStatement(sql);
+                        statement.setString(1, newUsername);  // assuming text is your search text
+                        statement.setInt(2, entity.getUSERID());
+                        updateTheData(statement);
+                    } catch (SQLException sqlexe) {
+                        sqlexe.printStackTrace();
+                    }
+                    cbtn2SubmitBtn.setVisible(false);
+                }
             }
         });
 //SETBOUNDS
@@ -308,5 +348,13 @@ public class SettingAdditional implements RootValue{
         cbtn4Panelsett.add(showPassCNP);
 
         cbtn4Framesett.add(cbtn4Panelsett);
+    }
+
+    public void updateTheData(PreparedStatement statement){
+        try {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

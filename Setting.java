@@ -5,11 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.table.*;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 
 public class Setting implements RootValue{
 
@@ -32,7 +27,6 @@ public class Setting implements RootValue{
         lineRight3.setBackground(Color.decode("#DBDCDE")); // Set the line color
         lineRight3.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
-        //Table Debtor
 		String [] [] rowSettings = {{"Name", "Users Names"},
 							 {"Username", "Users Usernames"},
 							 {"Password", "Users Pasword"}};
@@ -44,7 +38,6 @@ public class Setting implements RootValue{
 
 		JScrollPane spSettings = new JScrollPane(tb1Settings);
 
-		//end Table
 
 		JButton changebtn1Settings = new JButton("Change");
 		JButton changebtn2Settings = new JButton("Change");
@@ -70,8 +63,25 @@ public class Setting implements RootValue{
 		changebtn2Settings.setFocusPainted(false);
 		changebtn3Settings.setFocusPainted(false);
 
+//ADD ACTION
+		SettingAdditional settingsFrame = new SettingAdditional();
+		changebtn1Settings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				settingsFrame.ChangeAdminname();
+			}
+		});
+		changebtn2Settings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				settingsFrame.ChangeUsername();
+			}
+		});
+		changebtn3Settings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				settingsFrame.ChangePassword();
+			}
+		});
 
-
+//SETBOUNDS
         //Settings content
         settingsRight.setBounds(200, 0, 700, 550);//600
         settingsRight.setBackground(Color.decode("#F2F3F5"));
@@ -91,7 +101,7 @@ public class Setting implements RootValue{
         //End Change Buttons
 
 
-
+//ADD TO FRAME
 		settingsRight.add(settingsword);
 		settingsRight.add(lineRight3);
 		settingsRight.add(spSettings);
