@@ -7,6 +7,9 @@ import javax.swing.table.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -199,5 +202,22 @@ public class Payment implements RootValue{
 
         payDebtorFrame.add(payDebtorBottombar);
 
+    }
+
+     public void updateTheData(int loanID,String date, float amountPaid){
+        String sqlAddtoBorrower = "INSERT INTO `payments` (`LoanID`, `PaymentDate`, `AmountPaid`) VALUES (?, ?, ?);";
+      
+        try {
+            PreparedStatement statement = conn.prepareStatement(sqlAddtoBorrower);
+            statement.setInt(1, loanID);  // assuming text is your search text
+            statement.setString(2, date);  // assuming text is your search text
+            statement.setFloat(3, amountPaid);  // assuming text is your search text
+
+            // Execute the update
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
