@@ -7,6 +7,9 @@ import javax.swing.table.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -303,4 +306,68 @@ public class AddLoan implements RootValue{
 
 
     }
+
+      public void updateTheData(){
+        String sqlAddtoBorrower = "INSERT INTO `borrowers` (`FirstName`, `MiddleName`, `LastName`, `Email`, `PhoneNumber`, `Address`, `Classification`, `PayFrequency`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sqlAddtoLoan = "INSERT INTO `loans` (`BorrowerID`, `LoanTypeID`, `LoanAmount`, `InterestRate`, `Period`, `TotalCollection`, `StartDate`, `Status`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);";
+        String newUser = "INSERT INTO `usercredentials` (`Name`, `Username`, `Password`, `BorrowerID`) VALUES (?, ?, ?, ?);";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sqlAddtoBorrower);
+            statement.setString(1, "");  // assuming text is your search text
+            statement.setString(2, "");  // assuming text is your search text
+            statement.setString(3, "");  // assuming text is your search text
+            statement.setString(4, "");  // assuming text is your search text
+            statement.setString(5, "");  // assuming text is your search text
+            statement.setString(6, "");  // assuming text is your search text
+            statement.setString(7, "");  // assuming text is your search text
+            statement.setString(8, "");  // assuming text is your s
+
+            // Execute the update
+            int affectedRows = statement.executeUpdate();
+
+            // Check if any rows were affected
+            if (affectedRows > 0) {
+                // Retrieve the generated keys
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+
+                if (generatedKeys.next()) {
+                    // Get the generated ID
+                    int generatedId = generatedKeys.getInt(1);
+                    System.out.println("Generated ID: " + generatedId);
+                } else {
+                    System.out.println("No ID obtained.");
+                }
+            } else {
+                System.out.println("No rows affected.");
+            }
+
+            statement = conn.prepareStatement(sqlAddtoLoan);
+            statement.setString(1, "");  // assuming text is your search text
+            statement.setString(2, "");  // assuming text is your search text
+            statement.setString(3, "");  // assuming text is your search text
+            statement.setString(4, "");  // assuming text is your search text
+            statement.setString(5, "");  // assuming text is your search text
+            statement.setString(6, "");  // assuming text is your search text
+            statement.setString(7, "");  // assuming text is your search text
+            statement.setString(8, "");  // assuming text is your s
+
+            statement.executeUpdate();
+
+            statement = conn.prepareStatement(newUser);
+            statement.setString(1, "");  // assuming text is your search text
+            statement.setString(2, "");  // assuming text is your search text
+            statement.setString(3, "");  // assuming text is your search text
+            statement.setString(4, "");  // assuming text is your search text
+            statement.setString(5, "");  // assuming text is your search text
+            statement.setString(6, "");  // assuming text is your search text
+            statement.setString(7, "");  // assuming text is your search text
+            statement.setString(8, "");  // assuming text is your s
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
+

@@ -9,10 +9,7 @@ import javax.swing.table.*;
 
 public class Sidebar implements RootValue{
 
-    public static void main(String[] args) {
-        sidebar();
-    }
-    public static void sidebar(){//sidebar
+    public void sidebar(){//sidebar
         JFrame frame2 = new JFrame("Dashboard");
         JPanel leftSidebar = new JPanel(null);
 
@@ -154,7 +151,7 @@ public class Sidebar implements RootValue{
             public void mouseClicked(MouseEvent e) {
                 frame2.setVisible(false);
                 Login login = new Login();
-                login.main(null);
+                login.login();
             }
 
         });

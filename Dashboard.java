@@ -7,6 +7,9 @@ import javax.swing.table.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,10 +19,10 @@ public class Dashboard implements RootValue{
     public String USERNAME = entity.getAdminNAME();
 
     JPanel dashbRight = new JPanel(null);
+    DefaultTableModel dtmDashboard = new DefaultTableModel();
+  
 
     public void dashboardFrame() {
-
-        System.out.println(USERNAME);
 
         ImageIcon nodebtorsicon = new ImageIcon( currentDirectory +"\\no.debtors.png");
         ImageIcon duetodayicon = new ImageIcon( currentDirectory +"\\due-today.png");
@@ -82,7 +85,7 @@ public class Dashboard implements RootValue{
         duetodayword.setForeground(Color.decode(blackColor));
 
         //TODAYDUE
-        JLabel duetodaynumber = new JLabel("25"); //ETO ATA PAPALITAN
+        JLabel duetodaynumber = new JLabel(); //ETO ATA PAPALITAN
 
         duetodaynumber.setFont(customFont11);
         duetodaynumber.setForeground(Color.decode(blackColor));
@@ -109,15 +112,13 @@ public class Dashboard implements RootValue{
         todaysProfitnumber.setFont(customFont11);
         todaysProfitnumber.setForeground(Color.decode(blackColor));
 
-		//Table Dashboard
+		/*Table Dashboard
 		String [] [] rowDashboard = {{"Name1", "Debt1"},
 							 {"Name2", "Debt2"},
 							 {"Name3", "Debt3"},
 							 {"Name4", "Debt4"},
 							 {"Name5", "Debt5"}};
-
-		String [] colDashboard = {"   Name", "   Total Debts"};
-		DefaultTableModel dtmDashboard = new DefaultTableModel(rowDashboard,colDashboard);
+        */
 		JTable tb1Dasboard = new JTable(dtmDashboard);
 
 		JScrollPane spDashboard = new JScrollPane(tb1Dasboard);
@@ -227,6 +228,58 @@ public class Dashboard implements RootValue{
 		dashbRight.add(spDashboard);
 
 
+        String sqltable = "SELECT CONCAT(b.LastName, ', ', b.FirstName) AS name, ROUND((a.TotalCollection) / a.Period, 2) FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID LEFT JOIN loantypes c ON a.LoanTypeID = c.LoanTypeID " +
+        "WHERE (b.PayFrequency = 'WEEKLY' AND DATEDIFF(CURDATE(), a.StartDate) % 7 = 0) OR "+
+        "(b.PayFrequency = 'MONTHLY' AND DATEDIFF(CURDATE(), a.StartDate) % 30 = 0) OR "+
+        "(b.PayFrequency = 'YEARLY' AND DATEDIFF(CURDATE(), a.StartDate) % 365 = 0) ORDER BY b.LastName;";
+        String sqlForCollection = "SELECT ROUND(SUM(AmountPaid)) as num FROM payments WHERE PaymentDate = CURRENT_DATE;";
+        String slqForDebtor = "SELECT COUNT(*) as num FROM loans WHERE Status = 'Active';";
 
+        try {
+            PreparedStatement statement = conn.prepareStatement(sqltable);
+            ResultSet resultSet = statement.executeQuery();
+
+            // Clear existing data from table1
+            dtmDashboard.setRowCount(0);
+            dtmDashboard.setColumnCount(0);
+
+            // Get the number of columns in the result set
+            int columnCount = resultSet.getMetaData().getColumnCount();
+
+            String [] colDash = {"Name", "To Be Collected"};
+
+            // Set the column names using the colLoan array
+            dtmDashboard.setColumnIdentifiers(colDash);
+
+            // Add data rows to the table model
+            int rowCount = 0;
+            while (resultSet.next()) {
+                Object[] row = new Object[columnCount];
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = resultSet.getObject(i);
+                }
+                dtmDashboard.addRow(row);
+                rowCount++;
+            }
+            duetodaynumber.setText(String.valueOf(rowCount));
+
+//2nd SQL STATMENT
+            statement = conn.prepareStatement(sqlForCollection);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+               todaysProfitnumber.setText(String.valueOf(resultSet.getInt("num"))); 
+            }
+//3rd SQL STATMENT
+            statement = conn.prepareStatement(slqForDebtor);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                debtorsnumberBox.setText(String.valueOf(resultSet.getInt("num"))); 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 }
+

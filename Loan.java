@@ -200,7 +200,6 @@ public class Loan implements RootValue{
         try {
             ResultSet resultSet = statement.executeQuery();
 
-
             // Clear existing data from table1
             dtmDebtor.setRowCount(0);
             dtmDebtor.setColumnCount(0);
@@ -208,10 +207,9 @@ public class Loan implements RootValue{
             // Get the number of columns in the result set
             int columnCount = resultSet.getMetaData().getColumnCount();
 
-            // Add column names to the table model
-            for (int i = 1; i <= columnCount; i++) {
-                dtmDebtor.addColumn(resultSet.getMetaData().getColumnName(i));
-            }
+            String [] colLoan = {"ID", " Name", "Email","Classification","Loan","Status"};
+            // Set the column names using the colLoan array
+            dtmDebtor.setColumnIdentifiers(colLoan);
 
             // Add data rows to the table model
             while (resultSet.next()) {
