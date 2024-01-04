@@ -1,0 +1,62 @@
+//hover button and mouse icon function:
+        button1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                button1.setBackground(Color.decode("#006ad7"));//hover button color
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                button1.setBackground(Color.decode("#007dfe"));//back to original button
+            }
+        });
+        //
+
+//end hover button and mouse icon function
+
+
+HOVER BUTTONS COLOR: 
+
+loginBtn.setBackground(Color.decode("#007dfe"));orignal blue
+hover: #006ad7
+
+searchbtnDebtor.setBackground(Color.decode("#70baf8"));2nd blue
+hover: #096ec2
+
+addbtnDebtor.setBackground(Color.decode("#57F287")); green
+hover: #0fc447
+
+viewbtnDebtor.setBackground(Color.decode("#FEA948"));orange
+hover: #cf6f01
+
+paybtnDebtor.setBackground(Color.decode("#007dfe"));orig blue
+hover: #006ad7
+
+adSavebtn.setBackground(Color.decode("#57F287"));green
+hover: #0fc447
+
+adCancelbtn.setBackground(Color.decode("#FF1A1A")); red
+hover: #cb0000
+
+pdSaveBtn.setBackground(Color.decode("#57F287"));green
+hover: #0fc447
+
+pdCancelBtn.setBackground(Color.decode("#FF1A1A"));red
+hover: #cb0000
+
+JButton changebtn1Settings = new JButton("Submit");green
+JButton changebtn2Settings = new JButton("Submit");green
+JButton changebtn3Settings = new JButton("Submit");green
+hover: #0fc447
+
+cbtn1SubmitBtn.setBackground(Color.decode("#007dfe"));orig blue
+hover: #006ad7
+
+cbtn2SubmitBtn.setBackground(Color.decode("#007dfe"));orig blue
+hover: #006ad7
+
+cbtn3SubmitBtn.setBackground(Color.decode("#007dfe"));orig blue
+hover: #006ad7
+

@@ -21,8 +21,8 @@ import java.sql.SQLException;
 
 public class Loan implements RootValue{
 
-    JPanel leftSidebar = new JPanel(null);
-    JPanel debtorRight = new JPanel(null);
+    public JPanel leftSidebar = new JPanel(null);
+    public JPanel debtorRight = new JPanel(null);
 
 	DefaultTableModel dtmDebtor = new DefaultTableModel();
 
@@ -91,8 +91,8 @@ public class Loan implements RootValue{
 //ACTION
         searchbtnDebtor.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, c.TypeName AS `Classification`, a.LoanAmount AS `Amount`, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID LEFT JOIN loantypes c ON a.LoanTypeID = c.LoanTypeID " +
-                "WHERE b.FirstName LIKE ? OR b.LastName LIKE ? OR b.Middlename LIKE ? OR b.Email LIKE ? OR c.TypeName LIKE ? OR a.LoanAmount LIKE ? OR a.Status LIKE ? " +
+                String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID " +
+                "WHERE b.FirstName LIKE ? OR b.LastName LIKE ? OR b.Middlename LIKE ? OR b.Email LIKE ? OR a.LoanAmount LIKE ? OR a.Status LIKE ? " +
                 "ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName";
                 String text = searchtfDebtor.getText();
                 
@@ -104,7 +104,6 @@ public class Loan implements RootValue{
                     statement.setString(4, "%" + text + "%");
                     statement.setString(5, "%" + text + "%");
                     statement.setString(6, "%" + text + "%");
-                    statement.setString(7, "%" + text + "%");
                     loadTheData(statement);
                 } catch (SQLException sqlexe) {
                     sqlexe.printStackTrace();
@@ -122,14 +121,16 @@ public class Loan implements RootValue{
                 viewbtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
             public void mouseClicked(MouseEvent e) {
-
+                /* *
                 ViewLoan viewLoan = new ViewLoan();
                 int selectedRow = tb1Debtor.getSelectedRow();
                 if (selectedRow!= -1){
                     int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
                     viewLoan.viewLoanFrames(id);
                 }
-                
+                */
+                Sidebar sideLine = Sidebar.getInstance();
+                sideLine.addLoanToFrame2();
             }
         });
         //
@@ -153,6 +154,23 @@ public class Loan implements RootValue{
                     int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
                     viewFrame.paymentFrame(id);
                 }
+            }
+        });
+
+        addbtnDebtor.addMouseListener(new MouseAdapter() {
+
+            public void mouseEntered(MouseEvent e) {
+                paybtnDebtor.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            public void mouseExited(MouseEvent e) {
+                paybtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            public void mouseClicked(MouseEvent e) {
+                AddLoan newloan = new AddLoan();
+                newloan.ADDLOANER();
+
             }
         });
 
@@ -186,7 +204,7 @@ public class Loan implements RootValue{
 		debtorRight.add(paybtnDebtor);
 
 
-        String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, c.TypeName AS Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID LEFT JOIN loantypes c ON a.LoanTypeID = c.LoanTypeID ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
+        String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
         try {
             PreparedStatement statement = conn.prepareStatement(sql);
             loadTheData(statement);

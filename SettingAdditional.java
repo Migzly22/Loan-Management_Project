@@ -13,10 +13,6 @@ public class SettingAdditional implements RootValue{
 
     Entity entity = Entity.getInstance();
 
-    public static void main(String[] args) {
-        ChangePassword();
-    }
-
     public void ChangeAdminname(){
         //Settings ChangeBtn1 Enter Admin Name: Frame
         JFrame cbtn1Framesett = new JFrame("Enter Admin Name");
@@ -146,7 +142,7 @@ public class SettingAdditional implements RootValue{
                     } catch (SQLException sqlexe) {
                         sqlexe.printStackTrace();
                     }
-                    cbtn2SubmitBtn.setVisible(false);
+                    cbtn2Framesett.setVisible(false);
                 }
             }
         });
@@ -171,7 +167,7 @@ public class SettingAdditional implements RootValue{
 
         cbtn2Framesett.add(cbtn2Panelsett);
     }
-    public static void ChangePassword(){
+    public void ChangePassword(){
         JFrame cbtn3Framesett = new JFrame("Enter new Password: ");
         JPanel cbtn3Panelsett = new JPanel(null);
         Border cbtn3Bordersett = new MatteBorder(3, 3, 3, 3, Color.decode("#DBDCDE"));//ffffff or DBDCDE oe 8CC7FC or ecf6fe //TLBR
@@ -236,6 +232,23 @@ public class SettingAdditional implements RootValue{
             @Override
             public void mouseExited(MouseEvent e) {
                 cbtn3SubmitBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+            public void mouseClicked(MouseEvent e) {
+                String newPassword = new String(enterNewPasswordtf.getPassword());
+                String confirmPassword = new String(enterNewPasswordtf.getPassword());//confirm password 
+                String sql = "UPDATE usercredentials SET Password = ? WHERE UserID = ? ;";
+
+                if(newPassword.length() > 0 && newPassword.equals(confirmPassword)){
+                    try {
+                        PreparedStatement statement = conn.prepareStatement(sql);
+                        statement.setString(1, newPassword);  // assuming text is your search text
+                        statement.setInt(2, entity.getUSERID());
+                        updateTheData(statement);
+                    } catch (SQLException sqlexe) {
+                        sqlexe.printStackTrace();
+                    }
+                    cbtn3Framesett.setVisible(false);
+                }
             }
         });
 //SETBOUNDS

@@ -3,24 +3,44 @@ import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import javax.swing.table.*;
 
 public class Sidebar implements RootValue{
+    
+    JFrame frame2 = new JFrame("Dashboard");
+    Dashboard dashboard = new Dashboard();
+    Setting setting = new Setting();
+    Loan loan = new Loan();        
+    ViewLoan vloan = new ViewLoan();
+
+    private static Sidebar instance;
+    private Sidebar() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static Sidebar getInstance() {
+        if (instance == null) {
+            instance = new Sidebar();
+        }
+        return instance;
+    }
+
+
 
     public void sidebar(){//sidebar
-        JFrame frame2 = new JFrame("Dashboard");
         JPanel leftSidebar = new JPanel(null);
-
-        
-        Dashboard dashboard = new Dashboard();
-        Setting setting = new Setting();
-        Loan loan = new Loan();
+    
 
         dashboard.dashboardFrame();
         setting.settingspanel();
         loan.loanlist();
+        vloan.viewLoanFrames();
+
+
         
         ImageIcon icon2 = new ImageIcon( currentDirectory +"\\gplg.png");
         ImageIcon dashbicon = new ImageIcon( currentDirectory +"\\dashboard.png");
@@ -102,6 +122,7 @@ public class Sidebar implements RootValue{
                 frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
                 frame2.remove(loan.debtorRight);
+                frame2.remove(vloan.viewDebRight);  
 
                 frame2.setTitle("Settings");
                 frame2.add(setting.settingsRight);
@@ -119,6 +140,7 @@ public class Sidebar implements RootValue{
                 frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
                 frame2.remove(loan.debtorRight);
+                frame2.remove(vloan.viewDebRight);  
 
                 frame2.setTitle("Dashboard");
                 frame2.add(dashboard.dashbRight);
@@ -136,6 +158,7 @@ public class Sidebar implements RootValue{
                 frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
                 frame2.remove(loan.debtorRight);
+                frame2.remove(vloan.viewDebRight);  
 
                 frame2.setTitle("Loan");
                 frame2.add(loan.debtorRight);  
@@ -169,5 +192,25 @@ public class Sidebar implements RootValue{
 
 
     }
+    public void addLoanToFrame2() {
 
+
+        frame2.remove(dashboard.dashbRight);
+        frame2.remove(setting.settingsRight);
+        frame2.remove(loan.debtorRight);
+        frame2.add(vloan.viewDebRight);  
+        frame2.setTitle("View User");
+
+        frame2.revalidate();
+        frame2.repaint();
+    }
+    public void ReloadData() {        
+        String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            loan.loadTheData(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

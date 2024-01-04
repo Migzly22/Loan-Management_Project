@@ -175,8 +175,9 @@ public class Login implements RootValue{
                 public void actionPerformed(ActionEvent e){
                     addons.FrameNotif.setVisible(false);
                     
-                    Sidebar dashB = new Sidebar();
+                    Sidebar dashB = Sidebar.getInstance();
                     dashB.sidebar();
+          
 
                     addons.FrameNotif.dispose();
                     frame1.setVisible(false);
