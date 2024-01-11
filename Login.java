@@ -157,6 +157,7 @@ public class Login implements RootValue{
                 do {
                     Entity entity = Entity.getInstance();
                     entity.setAdminNAME(resultSet.getString("name"));
+                    entity.setUserName(resultSet.getString("Username"));
                     entity.setUSERID(resultSet.getInt("UserID"));
                 } while (resultSet.next());
                 nofifs(true);

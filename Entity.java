@@ -3,9 +3,12 @@ import java.security.NoSuchAlgorithmException;
 
 public class Entity {
     private String AdminNAME;
+    private String userName;
     private String ACCESS;
     private int USERID;
     private static Entity instance;
+
+
     private Entity() {
         // Private constructor to prevent instantiation
     }
@@ -19,6 +22,14 @@ public class Entity {
 
     
     // Getter and setter for AdminNAME
+       public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName (String userName) {
+        this.userName = userName;
+    }
+
     public String getAdminNAME() {
         return AdminNAME;
     }

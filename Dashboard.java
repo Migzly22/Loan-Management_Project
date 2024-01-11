@@ -20,7 +20,7 @@ public class Dashboard implements RootValue{
 
     JPanel dashbRight = new JPanel(null);
     DefaultTableModel dtmDashboard = new DefaultTableModel();
-  
+    JLabel wcUser = new JLabel();
 
     public void dashboardFrame() {
 
@@ -46,7 +46,8 @@ public class Dashboard implements RootValue{
         lineRight1.setBackground(Color.decode(greycolor)); // Set the line color
         lineRight1.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
-        JLabel wcUser = new JLabel("Welcome User: " + USERNAME);
+        wcUser.setText("Welcome User: " + USERNAME);;
+  
 
         wcUser.setFont(customFont9);
         wcUser.setForeground(Color.decode(blackColor));

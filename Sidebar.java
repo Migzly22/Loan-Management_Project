@@ -213,4 +213,12 @@ public class Sidebar implements RootValue{
             e.printStackTrace();
         }
     }
+
+    public void reloadSettings1(String name) {
+        setting.settNicknametf.setText(name);
+        dashboard.wcUser.setText(name);
+    }
+    public void reloadSettings2(String usernmae) {
+        setting.settUsernametf.setText(usernmae);
+    }
 }
