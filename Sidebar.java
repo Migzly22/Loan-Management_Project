@@ -38,7 +38,6 @@ public class Sidebar implements RootValue{
         dashboard.dashboardFrame();
         setting.settingspanel();
         loan.loanlist();
-        vloan.viewLoanFrames();
 
 
         
@@ -136,11 +135,13 @@ public class Sidebar implements RootValue{
         dashbLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
                 frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
                 frame2.remove(loan.debtorRight);
                 frame2.remove(vloan.viewDebRight);  
+        
+                dashboard = new Dashboard();
+                dashboard.dashboardFrame();
 
                 frame2.setTitle("Dashboard");
                 frame2.add(dashboard.dashbRight);
@@ -192,18 +193,25 @@ public class Sidebar implements RootValue{
 
 
     }
-    public void addLoanToFrame2() {
-
-
+    public void addLoanToFrame2(int BID) {
         frame2.remove(dashboard.dashbRight);
         frame2.remove(setting.settingsRight);
         frame2.remove(loan.debtorRight);
+        frame2.remove(vloan.viewDebRight);  
+
+        vloan = new ViewLoan();
+        vloan.viewLoanFrames(BID);
+
+       
         frame2.add(vloan.viewDebRight);  
         frame2.setTitle("View User");
 
         frame2.revalidate();
         frame2.repaint();
     }
+
+
+    
     public void ReloadData() {        
         String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
         try {
@@ -220,5 +228,8 @@ public class Sidebar implements RootValue{
     }
     public void reloadSettings2(String usernmae) {
         setting.settUsernametf.setText(usernmae);
+    }
+    public void reloadSettings3(String usernmae) {
+        
     }
 }

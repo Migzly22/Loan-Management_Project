@@ -7,30 +7,43 @@ import javax.swing.table.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import java.util.HashMap;
 
 public class ViewLoan implements RootValue {
 
     public JPanel viewDebRight = new JPanel(null);
     DefaultTableModel vddtmDebtor = new DefaultTableModel();
     
-    public void viewLoanFrames() {
+    public void viewLoanFrames(int bID) {
+
+
         //View Debtor Frame NEW DESIGN
         Border viewDebNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         viewDebRight.setBorder(viewDebNoLefttBorder);
+        
+        JLabel dashword = new JLabel("User Details");
+        dashword.setFont(customFont8);
+        dashword.setForeground(Color.decode("#073cb7"));
+        dashword.setBounds(15, 7, 200, 50);
 
-
-
-        JLabel lineRight10 = new JLabel("User Details");
+        JLabel lineRight10 = new JLabel();
         lineRight10.setOpaque(true);
         lineRight10.setBackground(Color.decode("#DBDCDE")); // Set the line color
         lineRight10.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
-        JLabel vdNameDebtor = new JLabel("Name Debtor :");
+
+
+
+        //CONTAINER OF DATA
+        HashMap<String, String> userData = loadTheData(bID);
+
+
+
+        JLabel vdNameDebtor = new JLabel(userData.get("LastName") + ", "+ userData.get("FirstName"));
 
         //left
         JLabel vdStartDate = new JLabel("Start Date :");
@@ -39,12 +52,27 @@ public class ViewLoan implements RootValue {
         JLabel vdAddress = new JLabel("Address :");
         JLabel vdClassfication = new JLabel("Classification :");
 
+        JLabel vdStartDate1 = new JLabel(userData.get("StartDate"));
+        JLabel vdEmail1 = new JLabel(userData.get("Email"));
+        JLabel vdPhoneNumber1 = new JLabel(userData.get("PhoneNumber"));
+        JLabel vdAddress1 = new JLabel(userData.get("Address"));
+        JLabel vdClassfication1 = new JLabel(userData.get("Classification"));
+
         //right
         JLabel vdFrequency = new JLabel("Frequency :");
         JLabel vdPeriod = new JLabel("Period :");
         JLabel vdLoan = new JLabel("Loan :");
         JLabel vdInterestRate = new JLabel("Interest Rate :");
         JLabel vdStatus = new JLabel("Status :");
+
+        JLabel vdFrequency1 = new JLabel(userData.get("PayFrequency"));
+        JLabel vdPeriod1 = new JLabel(userData.get("Period"));
+        JLabel vdLoan1 = new JLabel(userData.get("LoanAmount"));
+
+        float interest = Float.parseFloat(userData.get("InterestRate"))* 100;
+
+        JLabel vdInterestRate1 = new JLabel(interest + "%");
+        JLabel vdStatus1 = new JLabel(userData.get("Status"));
 
         JLabel vdPaymentHistory = new JLabel("Payment History");
 
@@ -58,13 +86,23 @@ public class ViewLoan implements RootValue {
         vdEmail.setFont(customFont31);
         vdPhoneNumber.setFont(customFont31);
         vdAddress.setFont(customFont31);
-        vdClassfication.setFont(customFont31);
+        vdClassfication1.setFont(customFont31);
+        vdStartDate1.setFont(customFont31);
+        vdEmail1.setFont(customFont31);
+        vdPhoneNumber1.setFont(customFont31);
+        vdAddress1.setFont(customFont31);
+        vdClassfication1.setFont(customFont31);
 
         vdFrequency.setFont(customFont31);
         vdPeriod.setFont(customFont31);
         vdLoan.setFont(customFont31);
         vdInterestRate.setFont(customFont31);
         vdStatus.setFont(customFont31);
+        vdFrequency1.setFont(customFont31);
+        vdPeriod1.setFont(customFont31);
+        vdLoan1.setFont(customFont31);
+        vdInterestRate1.setFont(customFont31);
+        vdStatus1.setFont(customFont31);
 
         vdStartDate.setForeground(Color.decode("#4d4d4d"));
         vdEmail.setForeground(Color.decode("#4d4d4d"));
@@ -72,27 +110,64 @@ public class ViewLoan implements RootValue {
         vdAddress.setForeground(Color.decode("#4d4d4d"));
         vdClassfication.setForeground(Color.decode("#4d4d4d"));
 
+        vdStartDate1.setForeground(Color.decode("#4d4d4d"));
+        vdEmail1.setForeground(Color.decode("#4d4d4d"));
+        vdPhoneNumber1.setForeground(Color.decode("#4d4d4d"));
+        vdAddress1.setForeground(Color.decode("#4d4d4d"));
+        vdClassfication1.setForeground(Color.decode("#4d4d4d"));
+
         vdFrequency.setForeground(Color.decode("#4d4d4d"));
         vdPeriod.setForeground(Color.decode("#4d4d4d"));
         vdLoan.setForeground(Color.decode("#4d4d4d"));
         vdInterestRate.setForeground(Color.decode("#4d4d4d"));
         vdStatus.setForeground(Color.decode("#4d4d4d"));
+        
+        vdFrequency1.setForeground(Color.decode("#4d4d4d"));
+        vdPeriod1.setForeground(Color.decode("#4d4d4d"));
+        vdLoan1.setForeground(Color.decode("#4d4d4d"));
+        vdInterestRate1.setForeground(Color.decode("#4d4d4d"));
+        vdStatus1.setForeground(Color.decode("#4d4d4d"));
 
         Font customFont32 = new Font("Century Gothic", Font.BOLD, 16);
         vdPaymentHistory.setFont(customFont32);
         vdPaymentHistory.setForeground(Color.decode("#4d4d4d"));
 
-        //Table View Debtor
-        String [] [] vdrowDebtor = {{"", "", "", "", "", "", ""},
-                            {"", "", "", "", "", "", ""},
-                            {"", "", "", "", "", "", ""},
-                            {"", "", "", "", "", "", ""},
-                            {"", "", "", "", "", "", ""}};
 
-        String [] vdcolDebtor = {"ID", "Name", "Date", "Loan", "Interest", "Total", "Status"};
+        DefaultTableModel dtmBorrowersLoans = new DefaultTableModel();
+        String sql = "SELECT LoanID,PaymentDate,AmountPaid FROM payments WHERE LoanID = ? ;";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, bID);
 
+            resultSet = preparedStatement.executeQuery();
 
-        JTable vdtb1Debtor = new JTable(vddtmDebtor);
+            // Clear existing data from table1
+            dtmBorrowersLoans.setRowCount(0);
+            dtmBorrowersLoans.setColumnCount(0);
+
+            // Get the number of columns in the result set
+            int columnCount = resultSet.getMetaData().getColumnCount();
+
+            String [] colLoan = {"ID", "Date","Amount"};
+            // Set the column names using the colLoan array
+            dtmBorrowersLoans.setColumnIdentifiers(colLoan);
+
+            // Add data rows to the table model
+            while (resultSet.next()) {
+                Object[] row = new Object[columnCount];
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = resultSet.getObject(i);
+                }
+                dtmBorrowersLoans.addRow(row);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JTable vdtb1Debtor = new JTable(dtmBorrowersLoans);
 
         JScrollPane vdspDebtor = new JScrollPane(vdtb1Debtor);
         //end Table
@@ -106,7 +181,7 @@ public class ViewLoan implements RootValue {
         viewDebRight.setVisible(true);
         lineRight10.setBounds(0, 65, 700, 2);
 
-        vdNameDebtor.setBounds(12,70,150,50);
+        vdNameDebtor.setBounds(12,70,400,50);
 
         vdStartDate.setBounds(12,130,100,20);
         vdEmail.setBounds(12,160,100,20);
@@ -114,11 +189,23 @@ public class ViewLoan implements RootValue {
         vdAddress.setBounds(12,220,100,20);
         vdClassfication.setBounds(12,250,100,20);
 
+        vdStartDate1.setBounds(130,130,190,20);
+        vdEmail1.setBounds(130,160,190,20);
+        vdPhoneNumber1.setBounds(130,190,190,20);
+        vdAddress1.setBounds(130,220,190,20);
+        vdClassfication1.setBounds(130,250,190,20);
+
         vdFrequency.setBounds(350,130,100,20);
         vdPeriod.setBounds(350,160,100,20);
         vdLoan.setBounds(350,190,100,20);
         vdInterestRate.setBounds(350,220,100,20);
         vdStatus.setBounds(350,250,100,20);
+
+        vdFrequency1.setBounds(465,130,190,20);
+        vdPeriod1.setBounds(465,160,190,20);
+        vdLoan1.setBounds(465,190,190,20);
+        vdInterestRate1.setBounds(465,220,190,20);
+        vdStatus1.setBounds(465,250,190,20);
 
         vdPaymentHistory.setBounds(270,320,150,20);
         vdspDebtor.setBounds(35,350,630,130);
@@ -128,7 +215,7 @@ public class ViewLoan implements RootValue {
         //End View Debtor Frame NEW DESIGN
 //ADD TO FRAME
         //View Debtor Frame NEW DESIGN
-
+        viewDebRight.add(dashword);
         viewDebRight.add(lineRight10);
 
         viewDebRight.add(vdNameDebtor);
@@ -138,12 +225,22 @@ public class ViewLoan implements RootValue {
         viewDebRight.add(vdPhoneNumber);
         viewDebRight.add(vdAddress);
         viewDebRight.add(vdClassfication);
+        viewDebRight.add(vdStartDate1);
+        viewDebRight.add(vdEmail1);
+        viewDebRight.add(vdPhoneNumber1);
+        viewDebRight.add(vdAddress1);
+        viewDebRight.add(vdClassfication1);
 
         viewDebRight.add(vdFrequency);
         viewDebRight.add(vdPeriod);
         viewDebRight.add(vdLoan);
         viewDebRight.add(vdInterestRate);
         viewDebRight.add(vdStatus);
+        viewDebRight.add(vdFrequency1);
+        viewDebRight.add(vdPeriod1);
+        viewDebRight.add(vdLoan1);
+        viewDebRight.add(vdInterestRate1);
+        viewDebRight.add(vdStatus1);
 
         viewDebRight.add(vdPaymentHistory);
         viewDebRight.add(vdspDebtor);
@@ -153,17 +250,38 @@ public class ViewLoan implements RootValue {
 
     }
 
-    public void loadTheData(PreparedStatement statement){
+    public  HashMap<String, String> loadTheData(int Borrowerid){
+        String sql = "SELECT a.*, b.* FROM borrowers a LEFT JOIN loans b ON a.BorrowerID = b.BorrowerID WHERE b.LoanID = ?;";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        HashMap<String, String> mixedMap = new HashMap<>();
+
         try {
-            ResultSet resultSet = statement.executeQuery();
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, Borrowerid);
 
-            // Add data rows to the table model
+            resultSet = preparedStatement.executeQuery();
+             // Get metadata about the result set
+            ResultSetMetaData metaData = resultSet.getMetaData();
+
+            // Get the number of columns
+            int columnCount = metaData.getColumnCount();
+
             while (resultSet.next()) {
+                // Iterate through columns dynamically
 
+                for (int i = 1; i <= columnCount; i++) {
+                    // Retrieve data from the result set using column name
+                    String columnName = metaData.getColumnName(i);
+                    String value = resultSet.getObject(columnName).toString();
+
+                    // Process the retrieved data
+                    mixedMap.put(columnName, value);
+                }
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            System.out.println(e);
         }
+        return mixedMap;
     }
 }

@@ -16,7 +16,6 @@ public class SettingAdditional implements RootValue{
     JButton cbtn2SubmitBtn = new JButton("Submit");
     JButton cbtn3SubmitBtn = new JButton("Submit");
     Sidebar sideLine = Sidebar.getInstance();
-    AdditionalFrames addons = new AdditionalFrames();
 
     public void ChangeAdminname(){
         //Settings ChangeBtn1 Enter Admin Name: Frame
@@ -60,7 +59,7 @@ public class SettingAdditional implements RootValue{
                 String newAdminName = enterAdminNametf.getText();
                 entity.setAdminNAME(newAdminName);
                 String sql = "UPDATE usercredentials SET Name = ? WHERE UserID = ? ;";
-
+                AdditionalFrames addons2 = new AdditionalFrames();
                 if(newAdminName.length() > 0){
                     try {
                         PreparedStatement statement = conn.prepareStatement(sql);
@@ -72,14 +71,14 @@ public class SettingAdditional implements RootValue{
 
                         sideLine.reloadSettings1(newAdminName);
 
-                        addons.messages("Success", "\\Check-65.png", "Updated Successfully");
-                        addons.okLoginlc.addActionListener(new ActionListener() {
+                        addons2.messages("Success", "\\Check-65.png", "Updated Successfully");
+                        addons2.okLoginlc.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e){
                                 cbtn1Framesett.setVisible(false);
                                 cbtn1Framesett.dispose();
 
-                                addons.FrameNotif.setVisible(false);
-                                addons.FrameNotif.dispose();
+                                addons2.FrameNotif.setVisible(false);
+                                addons2.FrameNotif.dispose();
                             }
                         });
 
@@ -153,7 +152,7 @@ public class SettingAdditional implements RootValue{
             public void mouseClicked(MouseEvent e) {
                 String newUsername = enterNewUsernametf.getText();
                 String sql = "UPDATE usercredentials SET Username = ? WHERE UserID = ? ;";
-
+                AdditionalFrames addons2 = new AdditionalFrames();
                 if(newUsername.length() > 0){
                     try {
                         PreparedStatement statement = conn.prepareStatement(sql);
@@ -163,14 +162,14 @@ public class SettingAdditional implements RootValue{
 
                         sideLine.reloadSettings1(newUsername);
 
-                        addons.messages("Success", "\\Check-65.png", "Updated Successfully");
-                        addons.okLoginlc.addActionListener(new ActionListener() {
+                        addons2.messages("Success", "\\Check-65.png", "Updated Successfully");
+                        addons2.okLoginlc.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e){
                                 cbtn2Framesett.setVisible(false);
                                 cbtn2Framesett.dispose();
 
-                                addons.FrameNotif.setVisible(false);
-                                addons.FrameNotif.dispose();
+                                addons2.FrameNotif.setVisible(false);
+                                addons2.FrameNotif.dispose();
                             }
                         });
                     } catch (SQLException sqlexe) {
@@ -255,30 +254,19 @@ public class SettingAdditional implements RootValue{
             public void mouseExited(MouseEvent e) {
                 showPassENP.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
+            
         });
          showPassENP.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     enterNewPasswordtf.setEchoChar((char) 0);
+                    confirmNewPasswordtf.setEchoChar((char) 0);
                 } else {
                     enterNewPasswordtf.setEchoChar('\u2022');
+                    confirmNewPasswordtf.setEchoChar('\u2022');
                 }
             }
         });
-
-        //Mouse Icon Hover
-        cbtn3SubmitBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                cbtn3SubmitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                cbtn3SubmitBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        });
-        //
 
         //Mouse Icon Hover
         cbtn3SubmitBtn.addMouseListener(new MouseAdapter() {
@@ -293,40 +281,55 @@ public class SettingAdditional implements RootValue{
             }
             public void mouseClicked(MouseEvent e) {
                 String newPassword = new String(enterNewPasswordtf.getPassword());
-                String confirmPassword = new String(enterNewPasswordtf.getPassword());//confirm password 
+                String confirmPassword = new String(confirmNewPasswordtf.getPassword());//confirm password
                 String sql = "UPDATE usercredentials SET Password = ? WHERE UserID = ? ;";
-
-                if(newPassword.length() > 0 && newPassword.equals(confirmPassword)){
+                AdditionalFrames addons2 = new AdditionalFrames();
+                if(newPassword.length() > 0){
                     try {
                         PreparedStatement statement = conn.prepareStatement(sql);
                         statement.setString(1, newPassword);  // assuming text is your search text
                         statement.setInt(2, entity.getUSERID());
                         updateTheData(statement);
 
-                        addons.messages("Success", "\\Check-65.png", "Updated Successfully");
-                        addons.okLoginlc.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e){
-                                cbtn3Framesett.setVisible(false);
-                                cbtn3Framesett.dispose();
+                        sideLine.reloadSettings3(newPassword);
 
-                                addons.FrameNotif.setVisible(false);
-                                addons.FrameNotif.dispose();
+
+                        addons2.messages("Success", "\\Check-65.png", "Updated Successfully");
+                        addons2.okLoginlc.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e){
+                                addons2.FrameNotif.setVisible(false);
+                                addons2.FrameNotif.dispose();
                             }
                         });
                     } catch (SQLException sqlexe) {
                         sqlexe.printStackTrace();
                     }
-                }else{
-                    addons.messages("Error", "\\Ekis-65.png", "Invalid Password");
-                    addons.okLoginlc.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e){
-                            addons.FrameNotif.setVisible(false);
-                            addons.FrameNotif.dispose();
-                        }
-                    });
+                    cbtn3Framesett.setVisible(false);
+                    cbtn3Framesett.dispose();
                 }
             }
         });
+        //
+
+        //Mouse Icon Hover
+        /*
+        cbtn3SubmitBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                
+                String newPassword = new String(enterNewPasswordtf.getPassword());
+                String confirmPassword = new String(confirmNewPasswordtf.getPassword());//confirm password
+
+                String sql = "UPDATE usercredentials SET Password = ? WHERE UserID = ? ;";
+
+                if(newPassword.equals(confirmPassword)){
+                    execution(sql,newPassword);
+                    nofifs(true, "Updated Successfully");
+                }else{
+                    nofifs(false, "Password doesnt match");
+                } 
+            }
+        });
+        */
 //SETBOUNDS
         cbtn3Panelsett.setBounds(0, 0, 430, 250);
         cbtn3Panelsett.setBackground(Color.decode("#ffffff"));
@@ -368,6 +371,16 @@ public class SettingAdditional implements RootValue{
             e.printStackTrace();
         }
     }
+public void execution(String sql, String newPassword){
+    try {
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setString(1, newPassword);  // assuming text is your search text
+        statement.setInt(2, entity.getUSERID());
+        updateTheData(statement);
+    } catch (SQLException sqlexe) {
+        sqlexe.printStackTrace();
+    }
+}
 
 
 }

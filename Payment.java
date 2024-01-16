@@ -5,13 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.table.*;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.sql.*;
+import java.util.HashMap;
 
 public class Payment implements RootValue{
     public void paymentFrame(int ID) {
@@ -25,7 +20,15 @@ public class Payment implements RootValue{
         ImageIcon payDebtoricon = new ImageIcon(currentDirectory+"\\pay-logo.png");
         payDebtorLogoTopbar.setIcon(payDebtoricon);
 
-        JLabel payDebtorWord = new JLabel("Pay");
+
+        HashMap<String, String> userData = loadTheData(ID);
+
+        String name = userData.get("LastName") + ", "+ userData.get("FirstName");
+        float lefttobecollected = Float.parseFloat(userData.get("totalleft"));
+        float mintobepaid = Float.parseFloat(userData.get("Interests"));
+
+
+        JLabel payDebtorWord = new JLabel("Payment");
         //Font customFont15 = new Font("Century Gothic", Font.BOLD, 22);
         payDebtorWord.setFont(customFont15);
         payDebtorWord.setForeground(Color.decode("#073cb7"));
@@ -40,33 +43,29 @@ public class Payment implements RootValue{
         Border payDebBottomBorder = new MatteBorder(0, 2, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         payDebtorBottombar.setBorder(payDebBottomBorder);
 
-		JLabel pdLoanerName = new JLabel("Loaner : Name"); //+.getText();
+		JLabel pdLoanerName = new JLabel("Name : "+ name); //+.getText();
 		Font customFont18 = new Font("Century Gothic", Font.BOLD, 15);
         pdLoanerName.setFont(customFont18);
         pdLoanerName.setForeground(Color.decode("#4d4d4d"));
 
-		JLabel pdTLlabel = new JLabel("Total Loan :");
-		JTextField pdTLtf = new JTextField();
+		JLabel pdTLlabel = new JLabel("Balance :");
+		JTextField pdTLtf = new JTextField(String.valueOf(lefttobecollected));
 
-		JLabel pdMPlabel = new JLabel("Monthly Pay :");
-		JTextField pdMPtf = new JTextField();
+		JLabel pdMPlabel = new JLabel("Min Amount :");
+		JTextField pdMPtf = new JTextField(String.valueOf(mintobepaid));
 
-		JLabel pdGMlabel = new JLabel("Given Money :");
+		JLabel pdGMlabel = new JLabel("Given  Amount :");
 		JTextField pdGMtf = new JTextField();
-
-		JLabel pdRLlabel = new JLabel("Remaining Loan: ");
-		JTextField pdRLtf = new JTextField();
 
 		//style
 		pdTLlabel.setFont(customFont16);
 		pdMPlabel.setFont(customFont16);
 		pdGMlabel.setFont(customFont16);
-		pdRLlabel.setFont(customFont16);
 
 		pdTLlabel.setForeground(Color.decode("#4d4d4d"));
 		pdMPlabel.setForeground(Color.decode("#4d4d4d"));
 		pdGMlabel.setForeground(Color.decode("#4d4d4d"));
-		pdRLlabel.setForeground(Color.decode("#4d4d4d"));
+
 
 		pdTLtf.setFont(customFont17);
 		pdTLtf.setForeground(Color.decode("#4d4d4d"));
@@ -80,9 +79,6 @@ public class Payment implements RootValue{
 		pdGMtf.setForeground(Color.decode("#4d4d4d"));
 		pdGMtf.setBorder(new LineBorder(Color.decode("#919293"), 1)); //#ffffff or #DBDCDE
 
-		pdRLtf.setFont(customFont17);
-		pdRLtf.setForeground(Color.decode("#4d4d4d"));
-		pdRLtf.setBorder(new LineBorder(Color.decode("#919293"), 1)); //#ffffff or #DBDCDE
 
 		pdTLtf.setEditable(false);
         pdTLtf.setBackground(Color.decode("#FBFBFC"));
@@ -90,8 +86,6 @@ public class Payment implements RootValue{
         pdMPtf.setEditable(false);
         pdMPtf.setBackground(Color.decode("#FBFBFC"));
 
-        pdRLtf.setEditable(false);
-        pdRLtf.setBackground(Color.decode("#FBFBFC"));
 		//end style
 
 
@@ -123,6 +117,45 @@ public class Payment implements RootValue{
             public void mouseExited(MouseEvent e) {
                 pdSaveBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
+
+            public void mouseClicked(MouseEvent e) {
+                pdSaveBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                float amount = Float.parseFloat(pdGMtf.getText());
+                if(amount > mintobepaid){
+                    float change = lefttobecollected - amount;
+                    amount = (change <= 0) ? lefttobecollected : amount;
+                    updateTheData(ID, amount);
+
+                    AdditionalFrames addons = new AdditionalFrames();
+                    addons.messages("Login", "\\Check-65.png", "Updated Successfully");
+                    addons.okLoginlc.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                            addons.FrameNotif.setVisible(false);
+                            
+                            Sidebar dashB = Sidebar.getInstance();
+                            dashB.sidebar();
+                  
+                            addons.FrameNotif.setVisible(false);
+                            addons.FrameNotif.dispose();
+                        }
+                    });
+                }else{
+                    AdditionalFrames addons = new AdditionalFrames();
+                    addons.messages("Login", "\\Ekis-65.png", "Wrong Amount");
+                    addons.okLoginlc.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                            addons.FrameNotif.setVisible(false);
+                            addons.FrameNotif.dispose();
+        
+                        }
+                    });
+                }
+
+                payDebtorFrame.setVisible(false);
+                payDebtorFrame.dispose();
+
+
+            }
         });
 
         //Mouse Icon Hover
@@ -139,6 +172,7 @@ public class Payment implements RootValue{
 
             public void mouseClicked(MouseEvent e) {
                 payDebtorFrame.setVisible(false);
+                
             }
         });
 
@@ -155,17 +189,15 @@ public class Payment implements RootValue{
         payDebtorBottombar.setBounds(0, 61, 400, 385);
         payDebtorBottombar.setBackground(Color.decode("#ffffff")); //#007dfe
 
-        pdLoanerName.setBounds(35, 100, 130, 50);
+        pdLoanerName.setBounds(35, 100, 230, 50);
 
-        pdTLlabel.setBounds(35, 150, 100, 50);
-        pdMPlabel.setBounds(35, 200, 100, 50);
-        pdGMlabel.setBounds(35, 250, 100, 50);
-        pdRLlabel.setBounds(35, 300, 120, 50);
+        pdTLlabel.setBounds(35, 150, 150, 50);
+        pdMPlabel.setBounds(35, 200, 150, 50);
+        pdGMlabel.setBounds(35, 250, 150, 50);
 
         pdTLtf.setBounds(165, 156, 210, 35);
         pdMPtf.setBounds(165, 206, 210, 35);
         pdGMtf.setBounds(165, 256, 210, 35);
-        pdRLtf.setBounds(165, 306, 210, 35);
 
         pdSaveBtn.setBounds(165, 370, 100, 40);
         pdCancelBtn.setBounds(275, 370, 100, 40);
@@ -194,9 +226,6 @@ public class Payment implements RootValue{
         payDebtorFrame.add(pdGMlabel);
         payDebtorFrame.add(pdGMtf);
 
-        payDebtorFrame.add(pdRLlabel);
-        payDebtorFrame.add(pdRLtf);
-
         payDebtorFrame.add(pdSaveBtn);
         payDebtorFrame.add(pdCancelBtn);
 
@@ -204,14 +233,47 @@ public class Payment implements RootValue{
 
     }
 
-     public void updateTheData(int loanID,String date, float amountPaid){
-        String sqlAddtoBorrower = "INSERT INTO `payments` (`LoanID`, `PaymentDate`, `AmountPaid`) VALUES (?, ?, ?);";
+    public static HashMap<String, String> loadTheData(int Borrowerid){
+        String sql = "SELECT c.*,b.*, b.TotalCollection - COALESCE(SUM(a.AmountPaid), 0) AS totalleft, ROUND((b.TotalCollection / b.Period), 2)  as Interests FROM loans b left JOIN payments a ON b.LoanID = a.LoanID LEFT JOIN borrowers c ON b.BorrowerID = c.BorrowerID WHERE b.LoanID = ? ;";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        HashMap<String, String> mixedMap = new HashMap<>();
+
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, Borrowerid);
+
+            resultSet = preparedStatement.executeQuery();
+             // Get metadata about the result set
+            ResultSetMetaData metaData = resultSet.getMetaData();
+
+            // Get the number of columns
+            int columnCount = metaData.getColumnCount();
+
+            while (resultSet.next()) {
+                // Iterate through columns dynamically
+
+                for (int i = 1; i <= columnCount; i++) {
+                    // Retrieve data from the result set using column name
+                    String columnName = metaData.getColumnName(i);
+                    String value = resultSet.getObject(columnName).toString();
+
+                    // Process the retrieved data
+                    mixedMap.put(columnName, value);
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return mixedMap;
+    }
+     public void updateTheData(int loanID, float amountPaid){
+        String sqlAddtoBorrower = "INSERT INTO `payments` (`LoanID`, `PaymentDate`, `AmountPaid`) VALUES (?, CURRENT_DATE, ?);";
       
         try {
             PreparedStatement statement = conn.prepareStatement(sqlAddtoBorrower);
             statement.setInt(1, loanID);  // assuming text is your search text
-            statement.setString(2, date);  // assuming text is your search text
-            statement.setFloat(3, amountPaid);  // assuming text is your search text
+            statement.setFloat(2, amountPaid);  // assuming text is your search text
 
             // Execute the update
             statement.executeUpdate();
@@ -220,4 +282,5 @@ public class Payment implements RootValue{
             e.printStackTrace();
         }
     }
+
 }

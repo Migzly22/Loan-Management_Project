@@ -121,16 +121,10 @@ public class Loan implements RootValue{
                 viewbtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
             public void mouseClicked(MouseEvent e) {
-                /* *
-                ViewLoan viewLoan = new ViewLoan();
                 int selectedRow = tb1Debtor.getSelectedRow();
-                if (selectedRow!= -1){
-                    int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
-                    viewLoan.viewLoanFrames(id);
-                }
-                */
+                int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
                 Sidebar sideLine = Sidebar.getInstance();
-                sideLine.addLoanToFrame2();
+                sideLine.addLoanToFrame2(id);
             }
         });
         //
