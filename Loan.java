@@ -49,21 +49,27 @@ public class Loan implements RootValue{
 
         JButton searchbtnDebtor = new JButton("Search");
         JButton addbtnDebtor = new JButton("Add");
+        JButton resetbtnDebtor = new JButton("Reset");
 
         Font customFont13 = new Font("Century Gothic", Font.BOLD, 14);
         searchbtnDebtor.setFont(customFont13);
         addbtnDebtor.setFont(customFont13);
+        resetbtnDebtor.setFont(customFont13);
 
         searchbtnDebtor.setForeground(Color.decode("#ffffff"));
         addbtnDebtor.setForeground(Color.decode("#ffffff"));
+        resetbtnDebtor.setForeground(Color.decode("#ffffff"));
 
         searchbtnDebtor.setBackground(Color.decode("#70baf8"));
         addbtnDebtor.setBackground(Color.decode("#57F287"));
+        resetbtnDebtor.setBackground(Color.decode("#70baf8"));
 
         searchbtnDebtor.setBorder(new LineBorder(Color.decode("#ffffff"), 2));//#ffffff or #DBDCDE
         addbtnDebtor.setBorder(new LineBorder(Color.decode("#ffffff"), 2)); //#ffffff or #DBDCDE
+        resetbtnDebtor.setBorder(new LineBorder(Color.decode("#ffffff"), 2)); //#ffffff or #DBDCDE
         searchbtnDebtor.setFocusPainted(false);
         addbtnDebtor.setFocusPainted(false);
+        resetbtnDebtor.setFocusPainted(false);
 
 		JTable tb1Debtor = new JTable(dtmDebtor);
 
@@ -110,6 +116,23 @@ public class Loan implements RootValue{
                 }
             }
         });
+
+        resetbtnDebtor.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID " +
+                "ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName";
+                
+                searchtfDebtor.setText("");
+
+                try {
+                    PreparedStatement statement = conn.prepareStatement(sql);
+                    loadTheData(statement);
+                } catch (SQLException sqlexe) {
+                    sqlexe.printStackTrace();
+                }
+            }
+        });
+
         //Mouse Icon Hover
         viewbtnDebtor.addMouseListener(new MouseAdapter() {
 
@@ -175,8 +198,9 @@ public class Loan implements RootValue{
         debtorword.setBounds(15, 7, 200, 50);
         lineRight2.setBounds(0, 65, 700, 2);
 
-        searchtfDebtor.setBounds(200, 100, 230, 40);
-        searchbtnDebtor.setBounds(440, 100, 90, 37);
+        searchtfDebtor.setBounds(110, 100, 230, 40);
+        searchbtnDebtor.setBounds(350, 100, 90, 37);
+        resetbtnDebtor.setBounds(450,100,90,37); 
         addbtnDebtor.setBounds(550, 100, 90, 37);
 
         spDebtor.setBounds(20,170,645,130);
@@ -193,6 +217,7 @@ public class Loan implements RootValue{
 		debtorRight.add(searchtfDebtor);
 		debtorRight.add(searchbtnDebtor);
 		debtorRight.add(addbtnDebtor);
+        debtorRight.add(resetbtnDebtor);
 		debtorRight.add(spDebtor);
 		debtorRight.add(viewbtnDebtor);
 		debtorRight.add(paybtnDebtor);
