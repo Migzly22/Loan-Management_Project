@@ -20,6 +20,20 @@ public class Login implements RootValue{
     JTextField userNametf = new JTextField("");
     JPasswordField passTf = new JPasswordField("");
 
+
+    private static Login instance;
+    private Login() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static Login getInstance() {
+        if (instance == null) {
+            instance = new Login();
+        }
+        return instance;
+    }
+
+
     public void login() {
 
         String imagePath = currentDirectory + "\\GiPit_lg.png";
@@ -157,7 +171,6 @@ public class Login implements RootValue{
                 do {
                     Entity entity = Entity.getInstance();
                     entity.setAdminNAME(resultSet.getString("name"));
-                    entity.setACCESS(resultSet.getString("Access"));
                     entity.setUserName(resultSet.getString("Username"));
                     entity.setUSERID(resultSet.getInt("UserID"));
                 } while (resultSet.next());
@@ -172,23 +185,23 @@ public class Login implements RootValue{
 //CODE FOR NOTIFICATIONS
     public void nofifs(boolean status){
         if (status) {
-            Entity entity = Entity.getInstance();
-
             addons.messages("Login", "\\Check-65.png", "Login Successfully");
             addons.okLoginlc.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e){
                     addons.FrameNotif.setVisible(false);
+                    addons.FrameNotif.dispose();
+                    frame1.setVisible(false);
+                    Entity entity = Entity.getInstance();
                     Sidebar dashB = Sidebar.getInstance();
-                    if(entity.getACCESS().equals("ADMIN")){
+
+                    if(entity.getAdminNAME().equals("Admin")){
                         dashB.sidebar();
                     }else{
                         dashB.sidebar2();
                     }
-
+                    
           
 
-                    addons.FrameNotif.dispose();
-                    frame1.setVisible(false);
                 }
             });
         }else{
@@ -206,4 +219,7 @@ public class Login implements RootValue{
         passTf.setText("");
     }
 
+    public void opennew (){
+        frame1.setVisible(true);
+    }
 }

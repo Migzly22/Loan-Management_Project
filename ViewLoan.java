@@ -250,37 +250,48 @@ public class ViewLoan implements RootValue {
 
     }
 
-    public  HashMap<String, String> loadTheData(int Borrowerid){
+    public HashMap<String, String> loadTheData(int Borrowerid) {
         String sql = "SELECT a.*, b.* FROM borrowers a LEFT JOIN loans b ON a.BorrowerID = b.BorrowerID WHERE b.LoanID = ?;";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         HashMap<String, String> mixedMap = new HashMap<>();
-
+    
         try {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, Borrowerid);
-
+    
             resultSet = preparedStatement.executeQuery();
-             // Get metadata about the result set
+            // Get metadata about the result set
             ResultSetMetaData metaData = resultSet.getMetaData();
-
+    
             // Get the number of columns
             int columnCount = metaData.getColumnCount();
-
+    
             while (resultSet.next()) {
                 // Iterate through columns dynamically
-
+    
                 for (int i = 1; i <= columnCount; i++) {
                     // Retrieve data from the result set using column name
                     String columnName = metaData.getColumnName(i);
-                    String value = resultSet.getObject(columnName).toString();
-
+                    Object valueObject = resultSet.getObject(columnName);
+    
+                    // Check if the value is null before converting it to string
+                    String value = (valueObject != null) ? valueObject.toString() : null;
+    
                     // Process the retrieved data
                     mixedMap.put(columnName, value);
                 }
             }
-        }catch (Exception e){
-            System.out.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close the ResultSet and PreparedStatement in a finally block
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return mixedMap;
     }

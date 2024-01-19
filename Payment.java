@@ -11,6 +11,8 @@ import java.util.HashMap;
 public class Payment implements RootValue{
     public void paymentFrame(int ID) {
           //Pay Debtor Frame
+
+
         JFrame payDebtorFrame = new JFrame("Pay");
         JPanel payDebtorTopbar = new JPanel(null);
         Border payDebTopBorder = new MatteBorder(2, 2, 0, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
@@ -20,7 +22,7 @@ public class Payment implements RootValue{
         ImageIcon payDebtoricon = new ImageIcon(currentDirectory+"\\pay-logo.png");
         payDebtorLogoTopbar.setIcon(payDebtoricon);
 
-
+        System.out.println(ID);
         HashMap<String, String> userData = loadTheData(ID);
 
         String name = userData.get("LastName") + ", "+ userData.get("FirstName");
@@ -242,29 +244,35 @@ public class Payment implements RootValue{
         try {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, Borrowerid);
-
+    
             resultSet = preparedStatement.executeQuery();
-             // Get metadata about the result set
+    
             ResultSetMetaData metaData = resultSet.getMetaData();
-
-            // Get the number of columns
             int columnCount = metaData.getColumnCount();
-
+    
             while (resultSet.next()) {
-                // Iterate through columns dynamically
-
                 for (int i = 1; i <= columnCount; i++) {
-                    // Retrieve data from the result set using column name
                     String columnName = metaData.getColumnName(i);
-                    String value = resultSet.getObject(columnName).toString();
-
-                    // Process the retrieved data
+                    Object valueObject = resultSet.getObject(columnName);
+    
+                    // Check if the value is null before converting it to string
+                    String value = (valueObject != null) ? valueObject.toString() : null;
+    
                     mixedMap.put(columnName, value);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
+        } finally {
+            // Close the ResultSet and PreparedStatement in a finally block
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+    
         return mixedMap;
     }
      public void updateTheData(int loanID, float amountPaid){

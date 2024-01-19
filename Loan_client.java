@@ -154,6 +154,7 @@ public class Loan_client implements RootValue{
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = tb1Debtor.getSelectedRow();
                 int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
+                
                 Sidebar sideLine = Sidebar.getInstance();
                 sideLine.addLoanToFrame2(id);
             }
@@ -173,8 +174,9 @@ public class Loan_client implements RootValue{
             public void mouseClicked(MouseEvent e) {
 
                 Payment viewFrame = new Payment();
-
+                
                 int selectedRow = tb1Debtor.getSelectedRow();
+
                 if (selectedRow!= -1){
                     int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
                     viewFrame.paymentFrame(id);

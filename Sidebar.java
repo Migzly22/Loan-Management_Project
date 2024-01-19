@@ -22,7 +22,9 @@ public class Sidebar implements RootValue{
     private Sidebar() {
         // Private constructor to prevent instantiation
     }
-
+    public static void resetInstance() {
+        instance = null;
+    }
     public static Sidebar getInstance() {
         if (instance == null) {
             instance = new Sidebar();
@@ -34,7 +36,7 @@ public class Sidebar implements RootValue{
 
     public void sidebar(){//sidebar
         JPanel leftSidebar = new JPanel(null);
-    
+        
 
         dashboard.dashboardFrame();
         setting.settingspanel();
@@ -174,9 +176,17 @@ public class Sidebar implements RootValue{
         logoutLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
+                frame2.remove(dashboard.dashbRight);
+                frame2.remove(setting.settingsRight);
+                frame2.remove(loan.debtorRight);
+                frame2.remove(vloan.viewDebRight); 
+
                 frame2.setVisible(false);
-                Login login = new Login();
-                login.login();
+                resetInstance();
+
+                Login login = Login.getInstance();
+                login.frame1.setVisible(true);
             }
 
         });
@@ -354,9 +364,17 @@ public class Sidebar implements RootValue{
         logoutLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
+                frame2.remove(dashboard.dashbRight);
+                frame2.remove(setting.settingsRight);
+                frame2.remove(loan.debtorRight);
+                frame2.remove(vloan.viewDebRight); 
+
                 frame2.setVisible(false);
-                Login login = new Login();
-                login.login();
+                resetInstance();
+
+                Login login = Login.getInstance();
+                login.frame1.setVisible(true);
             }
 
         });
