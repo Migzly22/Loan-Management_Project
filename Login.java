@@ -157,6 +157,7 @@ public class Login implements RootValue{
                 do {
                     Entity entity = Entity.getInstance();
                     entity.setAdminNAME(resultSet.getString("name"));
+                    entity.setACCESS(resultSet.getString("Access"));
                     entity.setUserName(resultSet.getString("Username"));
                     entity.setUSERID(resultSet.getInt("UserID"));
                 } while (resultSet.next());
@@ -171,13 +172,19 @@ public class Login implements RootValue{
 //CODE FOR NOTIFICATIONS
     public void nofifs(boolean status){
         if (status) {
+            Entity entity = Entity.getInstance();
+
             addons.messages("Login", "\\Check-65.png", "Login Successfully");
             addons.okLoginlc.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e){
                     addons.FrameNotif.setVisible(false);
-                    
                     Sidebar dashB = Sidebar.getInstance();
-                    dashB.sidebar();
+                    if(entity.getACCESS().equals("ADMIN")){
+                        dashB.sidebar();
+                    }else{
+                        dashB.sidebar2();
+                    }
+
           
 
                     addons.FrameNotif.dispose();
