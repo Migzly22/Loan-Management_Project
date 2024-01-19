@@ -166,24 +166,26 @@ public class Login implements RootValue{
             preparedStatement.setString(2, password);
 
             resultSet = preparedStatement.executeQuery();
-
+            String access = "";
             if (resultSet.next()) {
                 do {
                     Entity entity = Entity.getInstance();
                     entity.setAdminNAME(resultSet.getString("name"));
                     entity.setUserName(resultSet.getString("Username"));
                     entity.setUSERID(resultSet.getInt("UserID"));
+                    access = resultSet.getString("Access");
                 } while (resultSet.next());
-                nofifs(true);
+                System.out.println(access);
+                nofifs(true,access);
             }else{
-                nofifs(false);
+                nofifs(false,"");
             }
         }catch (Exception e){
             System.out.println(e);
         }
     }
 //CODE FOR NOTIFICATIONS
-    public void nofifs(boolean status){
+    public void nofifs(boolean status,String access){
         if (status) {
             addons.messages("Login", "\\Check-65.png", "Login Successfully");
             addons.okLoginlc.addActionListener(new ActionListener() {
@@ -191,10 +193,10 @@ public class Login implements RootValue{
                     addons.FrameNotif.setVisible(false);
                     addons.FrameNotif.dispose();
                     frame1.setVisible(false);
-                    Entity entity = Entity.getInstance();
                     Sidebar dashB = Sidebar.getInstance();
 
-                    if(entity.getAdminNAME().equals("Admin")){
+
+                    if(access.equals("ADMIN")){
                         dashB.sidebar();
                     }else{
                         dashB.sidebar2();

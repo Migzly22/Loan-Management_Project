@@ -240,7 +240,7 @@ public class Loan_client implements RootValue{
 
 
         Entity entity = Entity.getInstance();
-        String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID WHERE a.BorrowerID = '"+entity.getUSERID()+"' ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
+        String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID WHERE a.BorrowerID = '"+entity.getUSERID()+"' AND a.Status = 'Active' ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
         try {
             PreparedStatement statement = conn.prepareStatement(sql);
             loadTheData(statement);

@@ -225,10 +225,11 @@ public class Sidebar implements RootValue{
     public void sidebar2(){//sidebar
         JPanel leftSidebar = new JPanel(null);
     
+        int BID = 101;
 
         dashboard.dashboardFrame();
         setting.settingspanel();
-        loan2.loanlist();
+        vloan.viewLoanFrames(BID);
 
 
         
@@ -266,7 +267,7 @@ public class Sidebar implements RootValue{
         settingsLogo.setFont(customFont7);
         settingsLogo.setForeground(Color.decode(whiteColor));
 
-        JLabel debtorLogo = new JLabel("     Debtors");
+        JLabel debtorLogo = new JLabel("     View Loan");
         
         debtorLogo.setIcon(debtoricon);
         debtorLogo.setFont(customFont7);
@@ -349,12 +350,12 @@ public class Sidebar implements RootValue{
 
                 frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
-                frame2.remove(loan2.debtorRight);
+                frame2.remove(loan.debtorRight);
                 frame2.remove(vloan.viewDebRight);  
 
-                frame2.setTitle("Loan");
-                frame2.add(loan2.debtorRight);  
-
+                frame2.add(vloan.viewDebRight);  
+                frame2.setTitle("View User");
+        
                 frame2.revalidate();
                 frame2.repaint();
             }

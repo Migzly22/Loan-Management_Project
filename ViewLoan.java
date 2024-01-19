@@ -80,6 +80,30 @@ public class ViewLoan implements RootValue {
         vdNameDebtor.setFont(customFont9);
         vdNameDebtor.setForeground(Color.decode("#4d4d4d"));
         //
+        JButton paybtnDebtor = new JButton("Pay");
+        paybtnDebtor.setFont(customFont14);
+        paybtnDebtor.setForeground(Color.decode("#ffffff"));
+        paybtnDebtor.setBackground(Color.decode("#007dfe"));
+        paybtnDebtor.setBorder(new LineBorder(Color.decode("#ffffff"), 2)); //#ffffff or #DBDCDE
+        paybtnDebtor.setFocusPainted(false);
+        paybtnDebtor.addMouseListener(new MouseAdapter() {
+
+            public void mouseEntered(MouseEvent e) {
+                paybtnDebtor.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            public void mouseExited(MouseEvent e) {
+                paybtnDebtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            public void mouseClicked(MouseEvent e) {
+                Payment viewFrame = new Payment();  
+                viewFrame.paymentFrame(bID);
+            }
+        });
+        paybtnDebtor.setBounds(564, 488, 100, 40);
+
+
         Font customFont31 = new Font("Century Gothic", Font.BOLD, 13);
 
         vdStartDate.setFont(customFont31);
@@ -245,6 +269,9 @@ public class ViewLoan implements RootValue {
         viewDebRight.add(vdPaymentHistory);
         viewDebRight.add(vdspDebtor);
 
+
+
+        viewDebRight.add(paybtnDebtor);
         //frame2.add(viewDebRight);
         //End View Debtor Frame NEW DESIGN
 
