@@ -6,6 +6,7 @@ public class Entity {
     private String userName;
     private String ACCESS;
     private int USERID;
+    private int LOANID;
     private static Entity instance;
 
 
@@ -52,6 +53,15 @@ public class Entity {
 
     public void setUSERID(int USERID) {
         this.USERID = USERID;
+    }
+
+    // Getter and setter for LOANID
+    public int getLOANID() {
+        return LOANID;
+    }
+
+    public void setLOANID(int LOANID) {
+        this.USERID = LOANID;
     }
 
     public String generateMD5(String input) {

@@ -20,7 +20,7 @@ public class ViewLoan implements RootValue {
     
     public void viewLoanFrames(int bID) {
 
-
+        System.out.println(bID);
         //View Debtor Frame NEW DESIGN
         Border viewDebNoLefttBorder = new MatteBorder(2, 0, 3, 2, Color.decode("#DBDCDE"));//ffffff or DBDCDE or 8CC7FC or #ecf6fe //TLBR
         viewDebRight.setBorder(viewDebNoLefttBorder);

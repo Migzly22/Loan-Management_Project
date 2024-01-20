@@ -160,7 +160,7 @@ public class SettingAdditional implements RootValue{
                         statement.setInt(2, entity.getUSERID());
                         updateTheData(statement);
 
-                        sideLine.reloadSettings1(newUsername);
+                        sideLine.reloadSettings2(newUsername);
 
                         addons2.messages("Success", "\\Check-65.png", "Updated Successfully");
                         addons2.okLoginlc.addActionListener(new ActionListener() {

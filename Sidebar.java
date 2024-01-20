@@ -222,19 +222,16 @@ public class Sidebar implements RootValue{
     }
 
 
-    public void sidebar2(){//sidebar
+    public void sidebar2(int bid){//sidebar
         JPanel leftSidebar = new JPanel(null);
     
-        int BID = 101;
+        int BID = bid;
 
-        dashboard.dashboardFrame();
         setting.settingspanel();
         vloan.viewLoanFrames(BID);
 
 
-        
         ImageIcon icon2 = new ImageIcon( currentDirectory +"\\gplg.png");
-        ImageIcon dashbicon = new ImageIcon( currentDirectory +"\\dashboard.png");
         ImageIcon settingsicon = new ImageIcon( currentDirectory +"\\settings.png");
         ImageIcon debtoricon = new ImageIcon( currentDirectory +"\\debtor.png");//there is a bug here
         ImageIcon logouticon = new ImageIcon( currentDirectory +"\\logout.png");
@@ -252,13 +249,6 @@ public class Sidebar implements RootValue{
         lineLeft.setBackground(Color.decode(greycolor)); // Set the line color
         lineLeft.setPreferredSize(new Dimension(2, Integer.MAX_VALUE));
 
-
-		//Dashboard Sidebar
-        JLabel dashbLogo = new JLabel("     Dashboard");
-
-        dashbLogo.setIcon(dashbicon);
-        dashbLogo.setFont(customFont7);
-        dashbLogo.setForeground(Color.decode(whiteColor));
         
         //Settings Module
         JLabel settingsLogo = new JLabel("     Settings");
@@ -293,14 +283,13 @@ public class Sidebar implements RootValue{
         lineLeft.setBounds(0, 65, 600, 2);
         lineBottom.setBounds(0,460,600,2);
 
-        dashbLogo.setBounds(20, 85, 130, 50);
-        debtorLogo.setBounds(20, 135, 130, 50);
-        settingsLogo.setBounds(20, 185, 130, 50);
+        debtorLogo.setBounds(20, 85, 130, 50);
+        settingsLogo.setBounds(20, 135, 130, 50);
+        //settingsLogo.setBounds(20, 185, 130, 50);
         logoutLogo.setBounds(20, 470, 130, 50);
         leftSidebar.add(logoTopSidebar);
         leftSidebar.add(lineLeft);
         leftSidebar.add(lineBottom);
-        leftSidebar.add(dashbLogo);
         leftSidebar.add(debtorLogo);
         leftSidebar.add(settingsLogo);
         leftSidebar.add(logoutLogo);
@@ -310,9 +299,7 @@ public class Sidebar implements RootValue{
             @Override
             public void mouseClicked(MouseEvent e) {
     
-                frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
-                frame2.remove(loan2.debtorRight);
                 frame2.remove(vloan.viewDebRight);  
 
                 frame2.setTitle("Settings");
@@ -324,33 +311,10 @@ public class Sidebar implements RootValue{
             }
 
         });
-        dashbLogo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame2.remove(dashboard.dashbRight);
-                frame2.remove(setting.settingsRight);
-                frame2.remove(loan2.debtorRight);
-                frame2.remove(vloan.viewDebRight);  
-        
-                dashboard = new Dashboard();
-                dashboard.dashboardFrame();
-
-                frame2.setTitle("Dashboard");
-                frame2.add(dashboard.dashbRight);
-
-                // Update the container
-                frame2.revalidate();
-                frame2.repaint();
-            }
-
-        });
         debtorLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
-                frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
-                frame2.remove(loan.debtorRight);
                 frame2.remove(vloan.viewDebRight);  
 
                 frame2.add(vloan.viewDebRight);  
@@ -365,10 +329,7 @@ public class Sidebar implements RootValue{
         logoutLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
-                frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
-                frame2.remove(loan.debtorRight);
                 frame2.remove(vloan.viewDebRight); 
 
                 frame2.setVisible(false);
@@ -388,13 +349,11 @@ public class Sidebar implements RootValue{
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame2.add(leftSidebar);//add sidebar
-        frame2.add(dashboard.dashbRight);
+        frame2.add(vloan.viewDebRight);
 
 
 
     }
-
-
 
     public void ReloadData() {        
         String sql = "SELECT a.LoanID, CONCAT(b.LastName, ', ', b.FirstName) AS `Borrower's Name`, b.Email, b.Classification, a.LoanAmount AS Amount, a.Status FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName;";
