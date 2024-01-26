@@ -104,7 +104,7 @@ public class Sidebar implements RootValue{
         lineLeft.setBounds(0, 65, 600, 2);
         lineBottom.setBounds(0,460,600,2);
 
-        dashbLogo.setBounds(20, 85, 130, 50);
+        dashbLogo.setBounds(20, 85, 150, 50);
         debtorLogo.setBounds(20, 135, 130, 50);
         settingsLogo.setBounds(20, 185, 130, 50);
         logoutLogo.setBounds(20, 470, 130, 50);

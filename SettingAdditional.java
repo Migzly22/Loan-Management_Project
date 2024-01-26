@@ -95,7 +95,7 @@ public class SettingAdditional implements RootValue{
         cbtn1Panelsett.setBounds(0, 0, 350, 200);
 		cbtn1Panelsett.setBackground(Color.decode("#ffffff"));
 
-		enterAdminNamelbl.setBounds(107, 30, 150, 30);
+		enterAdminNamelbl.setBounds(100, 30, 160, 30);
 		enterAdminNametf.setBounds(65, 70, 220, 35);
 		cbtn1SubmitBtn.setBounds(130, 130, 90, 37);       
 //ADD TO FRAME
@@ -183,7 +183,7 @@ public class SettingAdditional implements RootValue{
 		cbtn2Panelsett.setBounds(0, 0, 350, 200);
 		cbtn2Panelsett.setBackground(Color.decode("#ffffff"));
 
-		enterNewUsernamelbl.setBounds(95, 30, 160, 30);
+		enterNewUsernamelbl.setBounds(85, 30, 170, 30);
 		enterNewUsernametf.setBounds(65, 70, 220, 35);
 		cbtn2SubmitBtn.setBounds(130, 130, 90, 37);
 
@@ -209,7 +209,7 @@ public class SettingAdditional implements RootValue{
         JLabel enterNewPasswordlbl = new JLabel("Enter new Password :");
         JPasswordField enterNewPasswordtf = new JPasswordField("");
 
-        JLabel confirmNewPasswordlbl = new JLabel("Confirm new Password :");
+        JLabel confirmNewPasswordlbl = new JLabel("Confirm Password :");
         JPasswordField confirmNewPasswordtf = new JPasswordField("");
 
         enterNewPasswordlbl.setFont(customFont3);
@@ -334,13 +334,14 @@ public class SettingAdditional implements RootValue{
         cbtn3Panelsett.setBounds(0, 0, 430, 250);
         cbtn3Panelsett.setBackground(Color.decode("#ffffff"));
 
-        enterNewPasswordlbl.setBounds(15, 50, 150, 30);
+        enterNewPasswordlbl.setBounds(15, 50, 200, 30);
         enterNewPasswordtf.setBounds(200, 50, 210, 35);
 
         confirmNewPasswordlbl.setBounds(15,110,190,30);
         confirmNewPasswordtf.setBounds(200,110,210,35);
 
-        showPassENP.setBounds(200, 150, 125, 20);
+        showPassENP.setBounds(200, 150, 135, 20);
+        showPassENP.setBackground(Color.decode(whiteColor));
 
         cbtn3SubmitBtn.setBounds(160, 190, 90, 37);
 //ADD TO FRAME        

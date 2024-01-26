@@ -3,6 +3,8 @@ import javax.swing.border.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,6 +57,7 @@ public class Login implements RootValue {
 
         JLabel login = new JLabel("LOGIN");
 
+        
         login.setFont(customFont2);
         login.setForeground(Color.decode(blueColor));
 
@@ -116,7 +119,7 @@ public class Login implements RootValue {
         userNametf.setBounds(40, 165, 300, 40);
         pass.setBounds(40, 185, 200, 100);
         passTf.setBounds(40, 250, 300, 40);
-        showPass.setBounds(40, 295, 125, 20);
+        showPass.setBounds(40, 295, 140, 20);
         loginBtn.setBounds(250, 320, 90, 37);
 
         // ADD TO FRAME
@@ -139,6 +142,24 @@ public class Login implements RootValue {
         right.add(loginBtn);
         frame1.add(right);
 
+    }
+
+    public static Font loadFontFromFile(String filePath, float size) {
+        try {
+            // Load font from file
+            File fontFile = new File(filePath);
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(size);
+
+            // Register the font with the graphics environment
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(customFont);
+
+            return customFont;
+        } catch (IOException | java.awt.FontFormatException e) {
+            e.printStackTrace();
+            // Handle exception as needed
+            return null;
+        }
     }
 
     // CODE FOR AUTHENITCATION
@@ -198,10 +219,10 @@ public class Login implements RootValue {
                             resultSet = preparedStatement.executeQuery();
                             if (resultSet.next()) {
                                 do {
-      
+
                                     dashB.sidebar2(resultSet.getInt("LoanID"));
                                 } while (resultSet.next());
-                            } 
+                            }
                         } catch (Exception x) {
                             System.out.println(x);
                         }
@@ -211,7 +232,7 @@ public class Login implements RootValue {
                 }
             });
         } else {
-            addons.messages("Login", "\\Ekis-65.png", "Wrong User Credentials");
+            addons.messages("Login", "\\Ekis-65.png", "Wrong Credentials");
             addons.okLoginlc.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     addons.FrameNotif.setVisible(false);
