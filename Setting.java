@@ -188,7 +188,7 @@ public class Setting implements RootValue{
         //
 
         //Label and Textfield
-        settChangeUserInformation.setBounds(12,70,230,50);
+        settChangeUserInformation.setBounds(12,70,250,50);
 
 		settNicknameLabel.setBounds(55,130,100,30);
 		settUsernameLabel.setBounds(55,180,100,30);

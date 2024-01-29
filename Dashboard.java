@@ -99,7 +99,7 @@ public class Dashboard implements RootValue{
         
         leftbox3.setIcon(todaysProfiticon);
 
-        JLabel todaysProfitword = new JLabel("Todays Profit");
+        JLabel todaysProfitword = new JLabel("Profit");
         todaysProfitword.setFont(customFont10);
         todaysProfitword.setForeground(Color.decode(blackColor));
 

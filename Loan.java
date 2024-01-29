@@ -140,7 +140,6 @@ public class Loan implements RootValue {
                         Sidebar sideLine = Sidebar.getInstance();
 
                         int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
-                        System.out.println(id);
                         sideLine.addLoanToFrame2(id);
                     }
                 }

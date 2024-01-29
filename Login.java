@@ -183,7 +183,6 @@ public class Login implements RootValue {
                     entity.setUSERID(resultSet.getInt("UserID"));
                     access = resultSet.getString("Access");
                 } while (resultSet.next());
-                System.out.println(access);
                 nofifs(true, access);
             } else {
                 nofifs(false, "");

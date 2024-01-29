@@ -192,16 +192,14 @@ public class Sidebar implements RootValue{
         });
 //ADD TO FRAME
         frame2.setLayout(null);
-        frame2.setUndecorated(true);
-        frame2.setBounds(0, 0, 900, 550); //600
+        frame2.setBounds(0, 0, 917, 588); //600
         frame2.setLocationRelativeTo(null);
-        frame2.setVisible(true);//false
+
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.setVisible(true);//false
 
         frame2.add(leftSidebar);//add sidebar
         frame2.add(dashboard.dashbRight);
-
-
 
     }
     public void addLoanToFrame2(int BID) {
