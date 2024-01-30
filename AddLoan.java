@@ -47,16 +47,21 @@ public class AddLoan implements RootValue {
 
         // Jtextfield left
         JTextField adFirstNametf = new JTextField();
+        adFirstNametf.addKeyListener(new NoNumberKeyListener());
         JTextField adMiddleNametf = new JTextField();
+        adMiddleNametf.addKeyListener(new NoNumberKeyListener());
         JTextField adLastNametf = new JTextField();
+        adLastNametf.addKeyListener(new NoNumberKeyListener());
         JTextField adEmailtf = new JTextField();
         JTextField adAddresstf = new JTextField();
         JTextField adConNumtf = new JTextField();
+        adConNumtf.addKeyListener(new NoLetter());
 
         // Jlabel right
         JLabel adClassificationLabel = new JLabel("Classification:");
         JLabel adFrequencyLabel = new JLabel("Frequency: ");
         JLabel adLoanAmountLabel = new JLabel("Loan Amount:");
+        adLoanAmountLabel.addKeyListener(new NoLetter());
 
         // Jtextfield right
         // JTextField adClassificationtf = new JTextField();
@@ -174,7 +179,7 @@ public class AddLoan implements RootValue {
             public void mouseClicked(MouseEvent e) {
                 int period = 0;
                 switch (adFrequency.getSelectedItem().toString()) {
-           
+
                     case "Weekly":
                         period = 4;
                         break;
@@ -250,12 +255,12 @@ public class AddLoan implements RootValue {
         adClassificationLabel.setBounds(400, 130, 100, 50);
         adFrequencyLabel.setBounds(400, 180, 100, 50);
         adLoanAmountLabel.setBounds(400, 230, 140, 50);
-        //adLoanAmountLabel.setBounds(400, 280, 100, 50);
+        // adLoanAmountLabel.setBounds(400, 280, 100, 50);
 
         adClassification.setBounds(540, 136, 210, 35);
         adFrequency.setBounds(540, 186, 210, 35);
         adLoanAmounttf.setBounds(540, 236, 210, 35);
-        //adLoanAmounttf.setBounds(540, 286, 210, 35);
+        // adLoanAmounttf.setBounds(540, 286, 210, 35);
         // adLoanAmounttf.setEditable(false);
         adLoanAmounttf.setBackground(Color.decode("#FBFBFC"));
         //
@@ -390,6 +395,52 @@ public class AddLoan implements RootValue {
 
                 }
             });
+        }
+    }
+
+    private class NoNumberKeyListener implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            char c = e.getKeyChar();
+
+            // Check if the entered character is a digit
+            if (Character.isDigit(c)) {
+                // If it's a digit, consume the event (ignore the key press)
+                e.consume();
+            }
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // Not used in this example
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // Not used in this example
+        }
+    }
+
+    private class NoLetter implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            char c = e.getKeyChar();
+
+            // Check if the entered character is a digit
+            if (Character.isLetter(c)) {
+                // If it's a digit, consume the event (ignore the key press)
+                e.consume();
+            }
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // Not used in this example
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // Not used in this example
         }
     }
 }

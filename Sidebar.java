@@ -129,6 +129,8 @@ public class Sidebar implements RootValue{
                 frame2.setTitle("Settings");
                 frame2.add(setting.settingsRight);
 
+    
+
                 // Update the container
                 frame2.revalidate();
                 frame2.repaint();
@@ -222,7 +224,8 @@ public class Sidebar implements RootValue{
 
     public void sidebar2(int bid){//sidebar
         JPanel leftSidebar = new JPanel(null);
-    
+        frame2.setTitle("User");
+
         int BID = bid;
 
         setting.settingspanel();
@@ -297,6 +300,7 @@ public class Sidebar implements RootValue{
             @Override
             public void mouseClicked(MouseEvent e) {
     
+                frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
                 frame2.remove(vloan.viewDebRight);  
 
@@ -312,6 +316,7 @@ public class Sidebar implements RootValue{
         debtorLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                frame2.remove(dashboard.dashbRight);
                 frame2.remove(setting.settingsRight);
                 frame2.remove(vloan.viewDebRight);  
 
@@ -340,11 +345,11 @@ public class Sidebar implements RootValue{
         });
 //ADD TO FRAME
         frame2.setLayout(null);
-        frame2.setUndecorated(true);
-        frame2.setBounds(0, 0, 900, 550); //600
+        frame2.setBounds(0, 0, 917, 588); //600
         frame2.setLocationRelativeTo(null);
-        frame2.setVisible(true);//false
+
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.setVisible(true);//false
 
         frame2.add(leftSidebar);//add sidebar
         frame2.add(vloan.viewDebRight);
