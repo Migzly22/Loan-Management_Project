@@ -126,14 +126,7 @@ public class Loan implements RootValue {
             }
             public void mouseClicked(MouseEvent e) {
                 tb1Debtor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-
-        });
-
-        tb1Debtor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    int selectedRow = tb1Debtor.getSelectedRow();
+                int selectedRow = tb1Debtor.getSelectedRow();
                     int selectedColumn = tb1Debtor.getSelectedColumn();
 
                     if (selectedColumn == 6) {
@@ -142,11 +135,9 @@ public class Loan implements RootValue {
                         int id = Integer.parseInt(dtmDebtor.getValueAt(selectedRow, 0).toString());
                         sideLine.addLoanToFrame2(id);
                     }
-                }
             }
-        });
 
-        //
+        });
 
         addbtnDebtor.addMouseListener(new MouseAdapter() {
 
@@ -170,7 +161,6 @@ public class Loan implements RootValue {
                 "ORDER BY CASE WHEN a.Status = 'Active' THEN 1 WHEN a.Status = 'Closed' THEN 2 ELSE 3 END, b.LastName";
                 
                 searchtfDebtor.setText("");
-
                 try {
                     PreparedStatement statement = conn.prepareStatement(sql);
                     loadTheData(statement);

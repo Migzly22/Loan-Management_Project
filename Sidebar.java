@@ -375,7 +375,9 @@ public class Sidebar implements RootValue{
     public void reloadSettings2(String usernmae) {
         setting.settUsernametf.setText(usernmae);
     }
-    public void reloadSettings3(String usernmae) {
-        
+
+
+    public void ReloadDataForView(int ID) {        
+        vloan.loadTheDataForTable(ID);
     }
 }

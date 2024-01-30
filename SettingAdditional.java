@@ -286,9 +286,6 @@ public class SettingAdditional implements RootValue {
                         statement.setString(1, newPassword); // assuming text is your search text
                         statement.setInt(2, entity.getUSERID());
                         updateTheData(statement);
-
-                        sideLine.reloadSettings3(newPassword);
-
                         /*
                          * *
                          * addons2.messages("Success", "\\Check-65.png", "Updated Successfully");

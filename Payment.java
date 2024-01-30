@@ -22,7 +22,6 @@ public class Payment implements RootValue {
         ImageIcon payDebtoricon = new ImageIcon(currentDirectory + "\\pay-logo.png");
         payDebtorLogoTopbar.setIcon(payDebtoricon);
 
-        System.out.println(ID);
         HashMap<String, String> userData = loadTheData(ID);
 
         String name = userData.get("LastName") + ", " + userData.get("FirstName");
@@ -120,19 +119,18 @@ public class Payment implements RootValue {
             public void mouseClicked(MouseEvent e) {
                 pdSaveBtn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 float amount = Float.parseFloat(pdGMtf.getText());
-                if (amount > mintobepaid) {
+                if (amount >= mintobepaid) {
                     float change = lefttobecollected - amount;
                     amount = (change <= 0) ? lefttobecollected : amount;
                     updateTheData(ID, amount);
 
                     AdditionalFrames addons = new AdditionalFrames();
-                    addons.messages("Login", "\\Check-65.png", "Updated Successfully");
+                    addons.messages("Message", "\\Check-65.png", "Updated Successfully");
                     addons.okLoginlc.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            addons.FrameNotif.setVisible(false);
 
                             Sidebar dashB = Sidebar.getInstance();
-                            dashB.sidebar();
+                            dashB.ReloadDataForView(ID);
 
                             addons.FrameNotif.setVisible(false);
                             addons.FrameNotif.dispose();
@@ -140,7 +138,7 @@ public class Payment implements RootValue {
                     });
                 } else {
                     AdditionalFrames addons = new AdditionalFrames();
-                    addons.messages("Login", "\\Ekis-65.png", "Wrong Amount");
+                    addons.messages("Message", "\\Ekis-65.png", "Wrong Amount");
                     addons.okLoginlc.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             addons.FrameNotif.setVisible(false);
@@ -295,10 +293,14 @@ public class Payment implements RootValue {
             char c = e.getKeyChar();
 
             // Check if the entered character is a digit
-            if (Character.isLetter(c)) {
+            if (Character.isLetter(c) || isSpecialCharacter(c)) {
                 // If it's a digit, consume the event (ignore the key press)
                 e.consume();
             }
+        }
+        private boolean isSpecialCharacter(char c) {
+            // Allow dots and hyphens as special characters
+            return !Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && c != '.' && c != '-';
         }
 
         @Override

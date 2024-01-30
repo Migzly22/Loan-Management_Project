@@ -16,8 +16,10 @@ import java.util.HashMap;
 public class ViewLoan implements RootValue {
 
     public JPanel viewDebRight = new JPanel(null);
-    DefaultTableModel vddtmDebtor = new DefaultTableModel();
-    
+
+    DefaultTableModel dtmBorrowersLoans = new DefaultTableModel();
+    JTable vdtb1Debtor = new JTable(dtmBorrowersLoans);
+
     public void viewLoanFrames(int bID) {
 
         System.out.println(bID);
@@ -157,41 +159,10 @@ public class ViewLoan implements RootValue {
         vdPaymentHistory.setForeground(Color.decode("#4d4d4d"));
 
 
-        DefaultTableModel dtmBorrowersLoans = new DefaultTableModel();
-        String sql = "SELECT LoanID,PaymentDate,AmountPaid FROM payments WHERE LoanID = ? ;";
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, bID);
+        loadTheDataForTable(bID);
+       
 
-            resultSet = preparedStatement.executeQuery();
-
-            // Clear existing data from table1
-            dtmBorrowersLoans.setRowCount(0);
-            dtmBorrowersLoans.setColumnCount(0);
-
-            // Get the number of columns in the result set
-            int columnCount = resultSet.getMetaData().getColumnCount();
-
-            String [] colLoan = {"ID", "Date","Amount"};
-            // Set the column names using the colLoan array
-            dtmBorrowersLoans.setColumnIdentifiers(colLoan);
-
-            // Add data rows to the table model
-            while (resultSet.next()) {
-                Object[] row = new Object[columnCount];
-                for (int i = 1; i <= columnCount; i++) {
-                    row[i - 1] = resultSet.getObject(i);
-                }
-                dtmBorrowersLoans.addRow(row);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        JTable vdtb1Debtor = new JTable(dtmBorrowersLoans);
+        
 
         JScrollPane vdspDebtor = new JScrollPane(vdtb1Debtor);
         //end Table
@@ -276,7 +247,40 @@ public class ViewLoan implements RootValue {
         //End View Debtor Frame NEW DESIGN
 
     }
+    public void loadTheDataForTable(int bID) {
+        String sql = "SELECT LoanID,PaymentDate,AmountPaid FROM payments WHERE LoanID = ? ;";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, bID);
 
+            resultSet = preparedStatement.executeQuery();
+
+            // Clear existing data from table1
+            dtmBorrowersLoans.setRowCount(0);
+            dtmBorrowersLoans.setColumnCount(0);
+
+            // Get the number of columns in the result set
+            int columnCount = resultSet.getMetaData().getColumnCount();
+
+            String [] colLoan = {"ID", "Date","Amount"};
+            // Set the column names using the colLoan array
+            dtmBorrowersLoans.setColumnIdentifiers(colLoan);
+
+            // Add data rows to the table model
+            while (resultSet.next()) {
+                Object[] row = new Object[columnCount];
+                for (int i = 1; i <= columnCount; i++) {
+                    row[i - 1] = resultSet.getObject(i);
+                }
+                dtmBorrowersLoans.addRow(row);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public HashMap<String, String> loadTheData(int Borrowerid) {
         String sql = "SELECT a.*, b.* FROM borrowers a LEFT JOIN loans b ON a.BorrowerID = b.BorrowerID WHERE b.LoanID = ?;";
         PreparedStatement preparedStatement = null;

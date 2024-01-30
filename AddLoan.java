@@ -74,7 +74,6 @@ public class AddLoan implements RootValue {
         JComboBox adFrequency = new JComboBox(select2);
         JTextField adLoanAmounttf = new JTextField();
         adLoanAmounttf.addKeyListener(new NoLetter());
-        //
 
         // left style
         Font customFont16 = new Font("Century Gothic", Font.BOLD, 13);
@@ -411,12 +410,15 @@ public class AddLoan implements RootValue {
             char c = e.getKeyChar();
 
             // Check if the entered character is a digit
-            if (Character.isDigit(c)) {
+            if (Character.isDigit(c) || isSpecialCharacter(c)) {
                 // If it's a digit, consume the event (ignore the key press)
                 e.consume();
             }
         }
-
+        private boolean isSpecialCharacter(char c) {
+            // Allow dots and hyphens as special characters
+            return !Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && c != '.' && c != '-';
+        }
         @Override
         public void keyPressed(KeyEvent e) {
             // Not used in this example
@@ -434,12 +436,15 @@ public class AddLoan implements RootValue {
             char c = e.getKeyChar();
 
             // Check if the entered character is a digit
-            if (Character.isLetter(c)) {
+            if (Character.isLetter(c) || isSpecialCharacter(c)) {
                 // If it's a digit, consume the event (ignore the key press)
                 e.consume();
             }
         }
-
+        private boolean isSpecialCharacter(char c) {
+            // Allow dots and hyphens as special characters
+            return !Character.isLetterOrDigit(c) && !Character.isWhitespace(c) && c != '.' ;
+        }
         @Override
         public void keyPressed(KeyEvent e) {
             // Not used in this example
