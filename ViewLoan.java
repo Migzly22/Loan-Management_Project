@@ -20,6 +20,7 @@ public class ViewLoan implements RootValue {
     DefaultTableModel dtmBorrowersLoans = new DefaultTableModel();
     JTable vdtb1Debtor = new JTable(dtmBorrowersLoans);
 
+    JLabel vdPeriod1 = new JLabel();
     public void viewLoanFrames(int bID) {
 
         System.out.println(bID);
@@ -62,20 +63,20 @@ public class ViewLoan implements RootValue {
 
         //right
         JLabel vdFrequency = new JLabel("Frequency :");
-        JLabel vdPeriod = new JLabel("Period :");
+        JLabel vdPeriod = new JLabel("Balance :");
         JLabel vdLoan = new JLabel("Loan :");
         JLabel vdInterestRate = new JLabel("Interest Rate :");
         JLabel vdStatus = new JLabel("Status :");
 
         JLabel vdFrequency1 = new JLabel(userData.get("PayFrequency"));
-        JLabel vdPeriod1 = new JLabel(userData.get("Period"));
+        vdPeriod1.setText(userData.get("Balance"));
         JLabel vdLoan1 = new JLabel(userData.get("LoanAmount"));
 
         float interest = Float.parseFloat(userData.get("InterestRate"))* 100;
 
         JLabel vdInterestRate1 = new JLabel(interest + "%");
         JLabel vdStatus1 = new JLabel(userData.get("Status"));
-
+        
         JLabel vdPaymentHistory = new JLabel("Payment History");
 
         //fonts
@@ -191,15 +192,15 @@ public class ViewLoan implements RootValue {
         vdClassfication1.setBounds(130,250,190,20);
 
         vdFrequency.setBounds(350,130,100,20);
-        vdPeriod.setBounds(350,160,100,20);
-        vdLoan.setBounds(350,190,100,20);
-        vdInterestRate.setBounds(350,220,100,20);
+        vdLoan.setBounds(350,160,100,20);
+        vdInterestRate.setBounds(350,190,100,20);
+        vdPeriod.setBounds(350,220,100,20);
         vdStatus.setBounds(350,250,100,20);
 
         vdFrequency1.setBounds(465,130,190,20);
-        vdPeriod1.setBounds(465,160,190,20);
-        vdLoan1.setBounds(465,190,190,20);
-        vdInterestRate1.setBounds(465,220,190,20);
+        vdLoan1.setBounds(465,160,190,20);
+        vdInterestRate1.setBounds(465,190,190,20);
+        vdPeriod1.setBounds(465,220,190,20);
         vdStatus1.setBounds(465,250,190,20);
 
         vdPaymentHistory.setBounds(270,320,150,20);
@@ -249,12 +250,13 @@ public class ViewLoan implements RootValue {
     }
     public void loadTheDataForTable(int bID) {
         String sql = "SELECT LoanID,PaymentDate,AmountPaid FROM payments WHERE LoanID = ? ;";
+        String sql2 = "SELECT b.TotalCollection - COALESCE(SUM(a.AmountPaid), 0) AS totalleft FROM loans b left JOIN payments a ON b.LoanID = a.LoanID LEFT JOIN borrowers c ON b.BorrowerID = c.BorrowerID WHERE b.LoanID = ? ;";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, bID);
-
+            
             resultSet = preparedStatement.executeQuery();
 
             // Clear existing data from table1
@@ -268,7 +270,6 @@ public class ViewLoan implements RootValue {
             // Set the column names using the colLoan array
             dtmBorrowersLoans.setColumnIdentifiers(colLoan);
 
-            // Add data rows to the table model
             while (resultSet.next()) {
                 Object[] row = new Object[columnCount];
                 for (int i = 1; i <= columnCount; i++) {
@@ -277,12 +278,21 @@ public class ViewLoan implements RootValue {
                 dtmBorrowersLoans.addRow(row);
             }
 
+            preparedStatement = conn.prepareStatement(sql2);
+            preparedStatement.setInt(1, bID);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                vdPeriod1.setText(String.valueOf(resultSet.getInt("totalleft")));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     public HashMap<String, String> loadTheData(int Borrowerid) {
-        String sql = "SELECT a.*, b.* FROM borrowers a LEFT JOIN loans b ON a.BorrowerID = b.BorrowerID WHERE b.LoanID = ?;";
+        String sql = "SELECT a.*, b.*, b.TotalCollection - COALESCE(SUM(c.AmountPaid),0) AS Balance FROM borrowers a LEFT JOIN loans b ON a.BorrowerID = b.BorrowerID \r\n" + //
+                "LEFT JOIN payments c ON b.LoanID = c.LoanID\r\n" + //
+                "WHERE b.LoanID = ?;";
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         HashMap<String, String> mixedMap = new HashMap<>();

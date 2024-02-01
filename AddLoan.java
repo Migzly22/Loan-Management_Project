@@ -366,7 +366,7 @@ public class AddLoan implements RootValue {
             if (resultSet.next()) {
                 INTERESTRATE = resultSet.getDouble("INTERESTRATE");
             }
-            double total_Repayment = principal + (principal * INTERESTRATE * Period);
+            double total_Repayment = principal + (principal * INTERESTRATE);//*Period */
 
             statement = conn.prepareStatement(sqlAddtoLoan);
             statement.setInt(1, generatedId); // assuming text is your search text
@@ -431,15 +431,22 @@ public class AddLoan implements RootValue {
     }
 
     private class NoLetter implements KeyListener {
+        
+        
         @Override
         public void keyTyped(KeyEvent e) {
             char c = e.getKeyChar();
 
+            JTextField textField = (JTextField) e.getSource();
+            String currentText = textField.getText();
+
+
             // Check if the entered character is a digit
-            if (Character.isLetter(c) || isSpecialCharacter(c)) {
+            if (Character.isLetter(c) || isSpecialCharacter(c) || currentText.length() > 11) {
                 // If it's a digit, consume the event (ignore the key press)
                 e.consume();
             }
+
         }
         private boolean isSpecialCharacter(char c) {
             // Allow dots and hyphens as special characters
