@@ -229,10 +229,10 @@ public class Dashboard implements RootValue{
 		dashbRight.add(spDashboard);
 
 
-        String sqltable = "SELECT CONCAT(b.LastName, ', ', b.FirstName) AS name, ROUND((a.TotalCollection) / a.Period, 2) FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID " +
-        "WHERE (b.PayFrequency = 'WEEKLY' AND DATEDIFF(CURDATE(), a.StartDate) % 7 = 0) OR "+
-        "(b.PayFrequency = 'MONTHLY' AND DATEDIFF(CURDATE(), a.StartDate) % 30 = 0) OR "+
-        "(b.PayFrequency = 'YEARLY' AND DATEDIFF(CURDATE(), a.StartDate) % 365 = 0) ORDER BY b.LastName;";
+        String sqltable = "SELECT CONCAT(b.LastName, ', ', b.FirstName) AS name, ROUND((a.TotalCollection) / a.Period, 2) FROM loans a LEFT JOIN borrowers b ON a.BorrowerID = b.BorrowerID "+
+        "WHERE ((b.PayFrequency = 'WEEKLY' AND DATEDIFF(CURDATE(), a.StartDate) % 7 = 0) OR " +
+        "(b.PayFrequency = 'MONTHLY' AND DATEDIFF(CURDATE(), a.StartDate) % 30 = 0) OR " +
+        "(b.PayFrequency = 'YEARLY' AND DATEDIFF(CURDATE(), a.StartDate) % 365 = 0) ) AND a.StartDate != CURRENT_DATE ORDER BY b.LastName;";
         String sqlForCollection = "SELECT ROUND(SUM(AmountPaid)) as num FROM payments WHERE PaymentDate = CURRENT_DATE;";
         String slqForDebtor = "SELECT COUNT(*) as num FROM loans WHERE Status = 'Active';";
 
